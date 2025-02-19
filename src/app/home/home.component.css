@@ -1,0 +1,53 @@
+.container {
+    width: 60%;
+    margin: auto;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Encabezado azul */
+  .header {
+    background: #007bff;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .content {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .form-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  
+  .form-control {
+    width: 200px;
+    padding: 5px;
+    margin-top: 5px;
+  }
+  
+  .info-box {
+    background: #f8d7a9;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+  }
+  
+  .btn-primary {
+    margin-top: 20px;
+  }
+  

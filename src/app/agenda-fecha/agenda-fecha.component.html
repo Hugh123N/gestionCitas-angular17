@@ -1,0 +1,63 @@
+<div class="container mt-5">
+    <div class="header">
+      <h1>Sistema Gestión de Citas</h1>
+      <h3>Registrar una nueva cita</h3>
+    </div>
+  
+    <div class="card p-4">
+      <div class="row">
+        <!-- Calendario -->
+        <div class="col-md-6">
+          <div class="calendar-header">
+            <button (click)="cambiarMes(-1)">❮</button>
+            <span>{{ obtenerNombreMes(mesActual) }} {{ anioActual }}</span>
+            <button (click)="cambiarMes(1)">❯</button>
+          </div>
+  
+          <table class="calendar">
+            <thead>
+              <tr>
+                <th *ngFor="let dia of diasSemana">{{ dia }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let semana of calendario">
+                <td *ngFor="let dia of semana"
+                    [ngClass]="{
+                      'disabled': dia?.esDomingo, 
+                      'selected': dia?.fecha === fechaSeleccionada
+                    }"
+                    (click)="seleccionarFecha(dia?.fecha)">
+                  {{ dia?.numero }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+        <!-- Horarios con scroll -->
+        <div class="col-md-6">
+          <h4>Seleccione un horario</h4>
+          <div class="horarios-container">
+            <ul class="horarios">
+              <li *ngFor="let hora of horariosDisponibles"
+                  (click)="seleccionarHora(hora)"
+                  [ngClass]="{'selected': hora === horaSeleccionada}">
+                {{ hora }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <div class="buttons">
+        <button class="btn btn-secondary" (click)="volver()">Atrás</button>
+        <button class="btn btn-primary" [disabled]="!fechaSeleccionada || !horaSeleccionada"
+        (click)="irAConfirmarCita()">
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+
+  

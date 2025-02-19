@@ -1,0 +1,12 @@
+.container {
+    max-width: 400px;
+  }
+  .card {
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .btn-close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+  }
