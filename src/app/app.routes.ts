@@ -1,17 +1,23 @@
 import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { AgendaFechaComponent } from './agenda-fecha/agenda-fecha.component';
-import { ConfirmarCitaComponent } from './confirmar-cita/confirmar-cita.component';
-import { MisCitasComponent } from './mis-citas/mis-citas.component';
+import { LoginComponent } from './auth/login/login.component';
 
 export const routes: Routes = [
-    {path:'login', component:LoginComponent},
-    {path:'home', component:HomeComponent},
-    {path:'agenda-fecha', component:AgendaFechaComponent},
-    {path:'confirmar-cita', component:ConfirmarCitaComponent},
-    {path:'mis-citas', component:MisCitasComponent},
-    {path:'', redirectTo:'/login', pathMatch:'full'}
+    { path: 'login', component: LoginComponent },
+    {
+        path: 'paciente',
+        //canMatch: [RoleGuard], // evita que el módulo se cargue si no tiene el rol
+        loadChildren: () =>
+            import('./paciente/paciente.routes').then(m => m.pacienteRoutes),
+        //data:{roles: ['paciente'],['admin']}
+    },
+    {
+        path: 'medico',
+        //canMatch: [RoleGuard], // evita que el módulo se cargue si no tiene el rol
+        loadChildren: () =>
+            import('./medico/medico.routes').then(m => m.medicoRoutes),
+        //data:{roles: ['medico']. ['admin']}
+    },
+    { path: '', redirectTo: '/login', pathMatch: 'full' }
 
 ];

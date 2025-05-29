@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServiceService } from '../service/service.service';
+import { ServiceService } from '../../../service/service.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './confirmar-cita.component.html',
   styleUrl: './confirmar-cita.component.css'
 })
-export class ConfirmarCitaComponent implements OnInit{
+export class ConfirmarCitaComponent implements OnInit {
   especialidad: string = '';
   doctor: string = '';
   idDoctor: number | null = null;
@@ -21,7 +21,7 @@ export class ConfirmarCitaComponent implements OnInit{
   paciente: any = {};
 
   constructor(private route: ActivatedRoute,
-    private router:Router, private service: ServiceService) {}
+    private router: Router, private service: ServiceService) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -71,7 +71,7 @@ export class ConfirmarCitaComponent implements OnInit{
     });
   }
 
-  volver(){
+  volver() {
     this.router.navigate(['/agenda-fecha']);
   }
 }

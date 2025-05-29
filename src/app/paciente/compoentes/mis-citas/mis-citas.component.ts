@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServiceService } from '../service/service.service';
+import { ServiceService } from '../../../service/service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -11,12 +11,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './mis-citas.component.html',
   styleUrl: './mis-citas.component.css'
 })
-export class MisCitasComponent implements OnInit{
+export class MisCitasComponent implements OnInit {
 
   citas: any[] = [];
   pacienteId: number | null = null;
 
-  constructor(private route: ActivatedRoute, private service: ServiceService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private service: ServiceService, private router: Router) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -38,7 +38,7 @@ export class MisCitasComponent implements OnInit{
     );
   }
 
-  volver(){
+  volver() {
     this.router.navigate(['/home']);
   }
 

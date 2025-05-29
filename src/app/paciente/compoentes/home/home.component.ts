@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceService } from '../service/service.service';
+import { ServiceService } from '../../../service/service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CitaService } from '../service/cita.service';
+import { CitaService } from '../../../service/cita.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
 
   especialidades: any[] = [];
   medicos: any[] = [];
@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit{
   idDoctorSeleccionado: number | null = null;
   pacienteId: string = '';
 
-  constructor(private service: ServiceService, private citaService:CitaService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private service: ServiceService, private citaService: CitaService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.cargarEspecialidades();
@@ -75,8 +75,8 @@ export class HomeComponent implements OnInit{
       this.doctorSeleccionado = medico.nombre;
       this.idDoctorSeleccionado = medico.id;
       this.citaService.setMedico(medico.id, medico.nombre);
-    }  
-  
+    }
+
   }
 
   irAAgenda() {

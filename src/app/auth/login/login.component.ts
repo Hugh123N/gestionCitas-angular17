@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ServiceService } from '../service/service.service';
+import { ServiceService } from '../../service/service.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AppComponent } from '../app.component';
+import { AppComponent } from '../../app.component';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class LoginComponent {
   dni: string = '';
   mensajeError: string = '';
 
-  constructor(private service: ServiceService, private router: Router) {}
+  constructor(private service: ServiceService, private router: Router) { }
 
   alternarFormulario(event: Event) {
     event.preventDefault(); // Previene la recarga de la página
@@ -40,7 +40,7 @@ export class LoginComponent {
     this.service.loginUser(usuario).subscribe({
       next: (response) => {
         if (response && response.id) {
-          this.router.navigate(['/home'], { queryParams: { pacienteId: response.id } });
+          this.router.navigate(['/paciente'], { queryParams: { pacienteId: response.id } });
         } else {
           this.mensajeError = 'Credenciales incorrectas';
         }
