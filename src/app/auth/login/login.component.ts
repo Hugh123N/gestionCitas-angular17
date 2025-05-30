@@ -3,14 +3,26 @@ import { ServiceService } from '../../service/service.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from '../../app.component';
+import { appConfig } from '../../app.config';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    FlexLayoutModule, MatToolbarModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+
 })
 export class LoginComponent {
 
