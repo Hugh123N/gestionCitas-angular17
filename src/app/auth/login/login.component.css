@@ -10,3 +10,86 @@
     right: 15px;
     top: 15px;
   }
+
+/* prueba*/
+.login-container {
+  height: 100vh;
+  background: linear-gradient(to right, #e0f7fa, #e1f5fe);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.login-header {
+  background-color: #1976d2;
+  color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-button {
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+}
+
+.login-button:hover {
+  background-color: #1565c0;
+}
+
+.register-text {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #555;
+}
+
+.register-text a {
+  color: #1976d2;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}
+
+/*btn contraseña*/
+
+.example-container mat-form-field + mat-form-field {
+  margin-left: 8px;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+/*email*/
+.example-container mat-form-field + mat-form-field {
+  margin-left: 8px;
+}

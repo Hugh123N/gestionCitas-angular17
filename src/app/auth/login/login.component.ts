@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+//import { Component } from '@angular/core';
 import { ServiceService } from '../../service/service.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,13 @@ import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import {merge} from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
@@ -19,22 +26,47 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    FlexLayoutModule, MatToolbarModule],
+    FlexLayoutModule, MatToolbarModule, MatIconModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
 export class LoginComponent {
 
+  readonly email = new FormControl('', [Validators.required, Validators.email]);
+  errorMessage = signal('');
+  updateErrorMessage() {
+    if (this.email.hasError('required')) {
+      this.errorMessage.set('You must enter a value');
+    } else if (this.email.hasError('email')) {
+      this.errorMessage.set('Not a valid email');
+    } else {
+      this.errorMessage.set('');
+    }
+  }
+
+
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
+
+  
   mostrarRegistro: boolean = false; // Controla qué formulario mostrar
-  email: string = '';
+  emaill: string = '';
   password: string = '';
   nombre: string = '';
   apellido: string = '';
   dni: string = '';
   mensajeError: string = '';
 
-  constructor(private service: ServiceService, private router: Router) { }
+  constructor(private service: ServiceService, private router: Router) {
+    merge(this.email.statusChanges, this.email.valueChanges)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.updateErrorMessage());
+   }
 
   alternarFormulario(event: Event) {
     event.preventDefault(); // Previene la recarga de la página
@@ -48,7 +80,7 @@ export class LoginComponent {
       return;
     }
 
-    const usuario = { email: this.email, password: this.password };
+    const usuario = { emaill: this.email, password: this.password };
     this.service.loginUser(usuario).subscribe({
       next: (response) => {
         if (response && response.id) {
@@ -70,7 +102,7 @@ export class LoginComponent {
     }
 
     const usuario = {
-      email: this.email,
+      email: this.emaill,
       password: this.password,
       nombre: this.nombre,
       apellido: this.apellido,
