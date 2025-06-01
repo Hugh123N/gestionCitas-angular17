@@ -1,44 +1,66 @@
-<div class="container mt-5">
-    <div class="header">
-        <h1>Sistema Gestión de Citas</h1>
-        <h3>Registrar una nueva cita</h3>
+<div fxLayout="column" fxLayoutGap="20px" style="padding: 20px;">
+  <mat-card>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <h2>👋 ¡Hola, {{ nombrePaciente }}!</h2>
+        <p>Bienvenido a tu panel de citas médicas.</p>
       </div>
-    <div class="card p-4">
-      <!-- Encabezado con fondo azul -->
-    
-      
-      <h5 class="text-center mt-4">Seleccione la especialidad y el medico</h5>
-      
-      <div class="row mt-3">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="especialidad" class="form-label"><strong>Especialidad:</strong></label>
-            <select id="especialidad" class="form-select" (change)="onEspecialidadChange($event)">
-              <option selected>- seleccionar -</option>
-              <option *ngFor="let esp of especialidades" [value]="esp.id">{{ esp.nombre }}</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="doctor" class="form-label"><strong>Medico:</strong></label>
-            <select id="doctor" class="form-select" (change)="onDoctorChange($event)">
-              <option selected>- seleccionar -</option>
-              <option *ngFor="let doc of medicos" [value]="doc.id">{{ doc.nombre }}</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="col-md-6">
-          <div class="p-3 bg-warning rounded">
-            <p><strong>Especialidad:</strong> {{ especialidadSeleccionada }}</p>
-            <p><strong>Medico:</strong> {{ doctorSeleccionado }}</p>
-            <p><strong>Costo:</strong>  s/. 40</p>
-            <p><strong>Duración:</strong> 30 min</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="text-end mt-3">
-        <button class="btn btn-primary" (click)="irAAgenda()">Siguiente</button>
-      </div>
+      <button mat-raised-button color="primary" routerLink="/paciente/agendar">
+        <mat-icon>add</mat-icon> Agendar nueva cita
+      </button>
     </div>
-  </div>
+  </mat-card>
+
+  <mat-card>
+    <h3>🗓️ Próximas citas</h3>
+
+    <table mat-table [dataSource]="citas" class="mat-elevation-z1 full-width-table">
+
+      <!-- Médico -->
+      <ng-container matColumnDef="medico">
+        <th mat-header-cell *matHeaderCellDef>Médico</th>
+        <td mat-cell *matCellDef="let cita">{{ cita.medico }}</td>
+      </ng-container>
+
+      <!-- Fecha -->
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+        <td mat-cell *matCellDef="let cita">{{ cita.fecha | date:'fullDate' }}</td>
+      </ng-container>
+
+      <!-- Hora -->
+      <ng-container matColumnDef="hora">
+        <th mat-header-cell *matHeaderCellDef>Hora</th>
+        <td mat-cell *matCellDef="let cita">{{ cita.hora }}</td>
+      </ng-container>
+
+      <!-- Estado -->
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let cita">
+          <span [ngClass]="estadoClass(cita.estado)">
+            {{ cita.estado }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Ver -->
+      <ng-container matColumnDef="accion">
+        <th mat-header-cell *matHeaderCellDef>Acción</th>
+        <td mat-cell *matCellDef="let cita">
+          <button mat-icon-button [routerLink]="['/paciente/mis-citas', cita.id]">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <div *ngIf="citas.length === 0" class="text-center p-4">
+      <p>No tienes citas programadas.</p>
+    </div>
+  </mat-card>
+</div>
