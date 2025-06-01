@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from '../../app.component';
 import { appConfig } from '../../app.config';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +25,8 @@ import {merge} from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, MatFormFieldModule,
+  imports: [CommonModule,
+  RouterLink,FormsModule, MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatCardModule,
@@ -53,7 +57,7 @@ export class LoginComponent {
     event.stopPropagation();
   }
 
-  
+
   mostrarRegistro: boolean = false; // Controla qué formulario mostrar
   emaill: string = '';
   password: string = '';
@@ -63,6 +67,7 @@ export class LoginComponent {
   mensajeError: string = '';
 
   constructor(private service: ServiceService, private router: Router) {
+    console.log('LoginComponent cargado');
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateErrorMessage());
