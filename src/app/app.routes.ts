@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component'; // Layout con header/footer
+import { AppComponent } from './app.component'; 
 import { LoginComponent } from './auth/login/login.component';
+import { RoleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
 
@@ -13,15 +14,15 @@ export const routes: Routes = [
         path: 'paciente',
         loadChildren: () =>
           import('./paciente/paciente.routes').then(m => m.pacienteRoutes),
-        // data: { roles: ['PACIENTE', 'ADMIN'] },
-        // canMatch: [RoleGuard]
+          data: { roles: ['PACIENTE', 'ADMIN'] },
+          canMatch: [RoleGuard]
       },
       {
         path: 'medico',
         loadChildren: () =>
           import('./medico/medico.routes').then(m => m.medicoRoutes),
-        // data: { roles: ['MEDICO', 'ADMIN'] },
-        // canMatch: [RoleGuard]
+          data: { roles: ['MEDICO', 'ADMIN'] },
+          canMatch: [RoleGuard]
       },
       /*{
         path: 'admin',
@@ -32,7 +33,7 @@ export const routes: Routes = [
       },*/
       {
         path: '',
-        redirectTo: 'paciente', // o 'medico', o una página home, depende de login
+        redirectTo: 'login', // o 'medico', o una página home, depende de login
         pathMatch: 'full'
       }
     ]

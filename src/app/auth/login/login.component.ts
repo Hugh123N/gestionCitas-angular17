@@ -14,12 +14,13 @@ import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
+import { AuthService } from '../../service/auth.service';
 
 
 @Component({
@@ -37,20 +38,14 @@ import {merge} from 'rxjs';
 
 })
 export class LoginComponent {
+  
+  private authService = inject(AuthService);
 
   readonly email = new FormControl('', [Validators.required, Validators.email]);
+  readonly passwordd = new FormControl('', [Validators.required]);
+
   errorMessage = signal('');
-  updateErrorMessage() {
-    if (this.email.hasError('required')) {
-      this.errorMessage.set('You must enter a value');
-    } else if (this.email.hasError('email')) {
-      this.errorMessage.set('Not a valid email');
-    } else {
-      this.errorMessage.set('');
-    }
-  }
-
-
+  
   hide = signal(true);
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
@@ -67,17 +62,36 @@ export class LoginComponent {
   mensajeError: string = '';
 
   constructor(private service: ServiceService, private router: Router) {
-    console.log('LoginComponent cargado');
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateErrorMessage());
+    merge(this.passwordd.statusChanges, this.passwordd.valueChanges)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.updateErrorMessage());
    }
+
+   updateErrorMessage() {
+    if (this.email.hasError('required')) {
+      this.errorMessage.set('Debes introducir un valor');
+    } else if (this.email.hasError('email')) {
+      this.errorMessage.set('Email no valido');
+    } else {
+      this.errorMessage.set('');
+    }
+    
+    if (this.passwordd.hasError('required')) {
+      this.errorMessage.set('Debes introducir al menos 6 digitos');
+    } else {
+      this.errorMessage.set('');
+    }
+  }
 
   alternarFormulario(event: Event) {
     event.preventDefault(); // Previene la recarga de la página
     this.mostrarRegistro = !this.mostrarRegistro;
     this.mensajeError = ''; // Limpiar mensajes al cambiar formulario
   }
+
 
   login() {
     if (!this.email || !this.password) {
@@ -123,6 +137,11 @@ export class LoginComponent {
         this.mensajeError = 'Error al registrar usuario';
       }
     });
+  }
+
+  //prueba login
+  log(): void{
+    this.authService.login(this.email, this.passwordd);
   }
 
 
