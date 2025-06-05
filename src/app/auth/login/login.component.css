@@ -1,44 +1,78 @@
-.container {
-    max-width: 400px;
-  }
-  .card {
-    padding: 20px;
-    border-radius: 10px;
-  }
+
   .btn-close {
     position: absolute;
     right: 15px;
     top: 15px;
   }
 
-  
 /* prueba*/
 .login-container {
   height: 100vh;
-  background: linear-gradient(to right, #e0f7fa, #e1f5fe);
+  background: radial-gradient(circle at 30% 30%, #f3f7fa, #668492, #e5d7f3);
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Círculos de luz difusa como acento visual */
+.login-container::before,
+.login-container::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(173, 216, 230, 0.4);
+  filter: blur(100px);
+  z-index: 0;
+}
+
+.login-container::before {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  left: 5%;
+}
+
+.login-container::after {
+  width: 400px;
+  height: 400px;
+  bottom: 5%;
+  right: 10%;
+}
+
+
+
+
 .login-card {
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  width: 380px;
+  padding: 32px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  z-index: 1;
+}
+
+/* Título centrado elegante */
+.login-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #0d47a1;
+  text-align: center;
+  margin-bottom: 12px;
 }
 
 .login-header {
-  background-color: #1976d2;
   color: white;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   padding: 24px;
   text-align: center;
   margin-bottom: 20px;
-}
-
-.login-title {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
 }
 
 .full-width {

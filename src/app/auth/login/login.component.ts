@@ -1,7 +1,7 @@
 //import { Component } from '@angular/core';
 import { ServiceService } from '../../service/service.service';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { AppComponent } from '../../app.component';
 import { appConfig } from '../../app.config';
 import { CommonModule } from '@angular/common';
@@ -17,132 +17,91 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {merge} from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { merge } from 'rxjs';
 import { AuthService } from '../../service/auth.service';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule,
-  RouterLink,FormsModule, MatFormFieldModule,
+    RouterLink, FormsModule, MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    FlexLayoutModule, MatToolbarModule, MatIconModule, ReactiveFormsModule],
+    FlexLayoutModule, MatToolbarModule, MatIconModule, ReactiveFormsModule, MatSelectModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
 export class LoginComponent {
-  
+
   private authService = inject(AuthService);
 
-  readonly email = new FormControl('', [Validators.required, Validators.email]);
-  readonly passwordd = new FormControl('', [Validators.required]);
+
+  mostrarRegistro: boolean = false;
+  mensajeError: string = '';
+
+  readonly loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required])
+  });
+
+  readonly registroForm = new FormGroup({
+    nombre: new FormControl('', [Validators.required]),
+    apellido: new FormControl('', [Validators.required]),
+    sexo: new FormControl('', [Validators.required]),
+    telefono: new FormControl(''),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    contrasenia: new FormControl('', [Validators.required, Validators.minLength(6)])
+  });
 
   errorMessage = signal('');
-  
+
   hide = signal(true);
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
 
-
-  mostrarRegistro: boolean = false; // Controla qué formulario mostrar
-  emaill: string = '';
-  password: string = '';
-  nombre: string = '';
-  apellido: string = '';
-  dni: string = '';
-  mensajeError: string = '';
-
   constructor(private service: ServiceService, private router: Router) {
-    merge(this.email.statusChanges, this.email.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateErrorMessage());
-    merge(this.passwordd.statusChanges, this.passwordd.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateErrorMessage());
-   }
 
-   updateErrorMessage() {
-    if (this.email.hasError('required')) {
-      this.errorMessage.set('Debes introducir un valor');
-    } else if (this.email.hasError('email')) {
-      this.errorMessage.set('Email no valido');
-    } else {
-      this.errorMessage.set('');
-    }
-    
-    if (this.passwordd.hasError('required')) {
-      this.errorMessage.set('Debes introducir al menos 6 digitos');
-    } else {
-      this.errorMessage.set('');
-    }
   }
 
   alternarFormulario(event: Event) {
     event.preventDefault(); // Previene la recarga de la página
     this.mostrarRegistro = !this.mostrarRegistro;
-    this.mensajeError = ''; // Limpiar mensajes al cambiar formulario
-  }
-
-
-  login() {
-    if (!this.email || !this.password) {
-      this.mensajeError = 'Todos los campos son obligatorios';
-      return;
-    }
-
-    const usuario = { emaill: this.email, password: this.password };
-    this.service.loginUser(usuario).subscribe({
-      next: (response) => {
-        if (response && response.id) {
-          this.router.navigate(['/paciente'], { queryParams: { pacienteId: response.id } });
-        } else {
-          this.mensajeError = 'Credenciales incorrectas';
-        }
-      },
-      error: (err) => {
-        this.mensajeError = 'Error en el inicio de sesión';
-      }
-    });
   }
 
   registrar() {
-    if (!this.email || !this.password || !this.nombre || !this.apellido || !this.dni) {
-      this.mensajeError = 'Todos los campos son obligatorios';
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched();
       return;
     }
 
-    const usuario = {
-      email: this.emaill,
-      password: this.password,
-      nombre: this.nombre,
-      apellido: this.apellido,
-      dni: this.dni
-    };
-
-    this.service.registerUser(usuario).subscribe({
+    const nuevoUsuario = this.registroForm.value;
+    this.service.registerUser(nuevoUsuario).subscribe({
       next: () => {
-        this.mostrarRegistro = false; // Cambia a login después de registrar
-        this.mensajeError = 'Registro exitoso, ahora puedes iniciar sesión';
+        alert('Usuario registrado exitosamente');
+        this.alternarFormulario(new Event('click')); // volver al login
       },
-      error: () => {
-        this.mensajeError = 'Error al registrar usuario';
+      error: err => {
+        console.error(err);
+        this.errorMessage.set('Error al registrar el usuario');
       }
     });
   }
 
-  //prueba login
-  log(): void{
-    this.authService.login(this.email, this.passwordd);
+  login(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+    const { email, password } = this.loginForm.value;
+    this.authService.login(email!, password!);
   }
-
-
 }

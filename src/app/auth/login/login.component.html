@@ -1,44 +1,41 @@
 <div fxLayout="column" fxLayoutAlign="center center" class="login-container">
   <mat-card class="login-card">
-    <mat-card-header class="login-header">
+    <mat-card-header fxLayoutAlign="center center" class="login-header" style="height: 15%;">
       <mat-card-title>
-        <h2 class="login-title">Bienvenido</h2>
+        <h2 class="text-center mb-1 login-title">
+          {{ mostrarRegistro ? "Registrarse" : "Login" }}
+        </h2>
       </mat-card-title>
     </mat-card-header>
 
+    @if (!mostrarRegistro) {
     <mat-card-content>
-      <form (ngSubmit)="log()" fxLayout="column" fxLayoutGap="20px">
+      <form [formGroup]="loginForm" (ngSubmit)="login()" fxLayout="column" fxLayoutGap="20px">
         <mat-form-field appearance="outline">
           <mat-label>Introduce tu correo electrónico</mat-label>
-          <input
-            matInput
-            placeholder="pat@example.com"
-            [formControl]="email"
-            (blur)="updateErrorMessage()"
-            required
-          />
-          @if (email.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
-          }
+          <input matInput type="email" formControlName="email" required />
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            El correo es obligatorio
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+            El correo no es valido
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Introduce tu contraseña</mat-label>
-          <input matInput  
-          [formControl]="passwordd"
-          (blur)="updateErrorMessage()"
-          [type]="hide() ? 'password' : 'text'" 
+          <input
+            matInput
+            formControlName="password"
+            [type]="hide() ? 'password' : 'text'"
+            required
           />
-          @if (passwordd.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
-          }
-          <button
-            matIconButton
-            matSuffix
-            (click)="clickEvent($event)"
-            [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide()"
+          <mat-error
+            *ngIf="loginForm.get('password')?.hasError('required')"
           >
+            La contraseña es obligatorio
+          </mat-error>
+          <button mat-icon-button matSuffix (click)="clickEvent($event)">
             <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
         </mat-form-field>
@@ -53,79 +50,96 @@
         </button>
       </form>
     </mat-card-content>
-
     <mat-card-actions fxLayoutAlign="center center">
       <span class="register-text"
-        >¿Aún no tienes cuenta? <a href="#">Regístrate</a></span
-      >
+        >¿Aún no tienes cuenta?
+        <a href="#" (click)="alternarFormulario($event)">Regístrate aquí</a>
+      </span>
     </mat-card-actions>
+
+    } @if (mostrarRegistro) {
+    <button
+      class="btn-close float-end"
+      (click)="alternarFormulario($event)"
+    ></button>
+    <mat-card-content>
+      <form
+        (ngSubmit)="registrar()"
+        [formGroup]="registroForm"
+        fxLayout="column"
+        fxLayoutGap="3px"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="nombre" required />
+          <mat-error *ngIf="registroForm.get('nombre')?.hasError('required')">
+            El nombre es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Apellido</mat-label>
+          <input matInput formControlName="apellido" required />
+          <mat-error *ngIf="registroForm.get('apellido')?.hasError('required')">
+            El Apellido es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Sexo</mat-label>
+          <mat-select formControlName="sexo" required>
+            <mat-option value="Masculino">Masculino</mat-option>
+            <mat-option value="Femenino">Femenino</mat-option>
+            <mat-option value="Otro">Otro</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" required type="email" />
+          <mat-error *ngIf="registroForm.get('email')?.hasError('required')">
+            El correo es obligatorio
+          </mat-error>
+          <mat-error *ngIf="registroForm.get('email')?.hasError('email')">
+            El correo no es valido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            [type]="hide() ? 'password' : 'text'"
+            formControlName="contrasenia"
+            required
+          />
+          <mat-error *ngIf="registroForm.get('contrasenia')?.hasError('required')">
+            La contraseña es obligatoria
+          </mat-error>
+          <mat-error *ngIf="registroForm.get('contrasenia')?.hasError('minlength')">
+            La contraseña debe tener al menos 6 caracteres
+          </mat-error>
+          <button mat-icon-button matSuffix (click)="clickEvent($event)">
+            <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          class="login-button full-width"
+        >
+          Registrarse
+        </button>
+      </form>
+    </mat-card-content>
+    }
   </mat-card>
 </div>
 
-<!--
-<div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-12">
-        <div class="card shadow-lg">
-          <div class="card-body">
-            <h3 class="text-center mb-4">{{ mostrarRegistro ? 'Registrarse' : 'Login' }}</h3>
-  
-            @if (!mostrarRegistro) {
-              <form (submit)="login(); $event.preventDefault();">
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="email" [(ngModel)]="email" name="email">
-                </div>
-                <div class="mb-3">
-                  <label for="password" class="form-label">Contraseña</label>
-                  <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password">
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-              </form>
-  
-              <p class="text-danger text-center mt-2">{{ mensajeError }}</p>
-  
-              <div class="mt-3 text-center">
-                <span>¿Aún no tienes cuenta?</span>
-                <a href="#" (click)="alternarFormulario($event)">Regístrate aquí</a>
-              </div>
-            }
-  
-            @if (mostrarRegistro) {
-              <button class="btn-close float-end" (click)="alternarFormulario($event)"></button>
-              <form (submit)="registrar(); $event.preventDefault();">
-                <div class="mb-3">
-                  <label for="emailRegistro" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="emailRegistro" [(ngModel)]="email" name="email">
-                </div>
-                <div class="mb-3">
-                  <label for="passwordRegistro" class="form-label">Contraseña</label>
-                  <input type="password" class="form-control" id="passwordRegistro" [(ngModel)]="password" name="password">
-                </div>
-                <div class="mb-3">
-                  <label for="nombre" class="form-label">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" [(ngModel)]="nombre" name="nombre">
-                </div>
-                <div class="mb-3">
-                  <label for="apellido" class="form-label">Apellido</label>
-                  <input type="text" class="form-control" id="apellido" [(ngModel)]="apellido" name="apellido">
-                </div>
-                <div class="mb-3">
-                  <label for="dni" class="form-label">DNI</label>
-                  <input type="text" class="form-control" id="dni" [(ngModel)]="dni" name="dni">
-                </div>
-                <button type="submit" class="btn btn-success w-100">Registrarse</button>
-              </form>
-  
-              <p class="text-danger text-center mt-2">{{ mensajeError }}</p>
-  
-              <div class="mt-3 text-center">
-                <a href="#" (click)="alternarFormulario($event)">Iniciar sesión</a>
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
--->

@@ -24,7 +24,7 @@ export class AuthService {
       role: UserRole.PACIENTE, // Valor por defecto, se sobrescribirá al iniciar sesión
       isLoggedIn: false,
     });
- 
+
   public currentUser$: Observable<UserData> =
     this.currentUserSubject.asObservable();
 
@@ -40,15 +40,15 @@ export class AuthService {
    * @param password La contraseña.
    * @param role El rol del usuario (para simulación).
    */
-  login(email: FormControl, password: FormControl): void {
+  login(email: string, password: string): void {
     // Lógica real: Llamada a la API de login
     // Si la autenticación es exitosa:
     let userData: UserData;
-    if (email.value === "paciente@gmail.com") {
+    if (email === "paciente@gmail.com") {
       userData = pacienteUser;
-    } else if (email.value === 'medico@gmail.com') {
+    } else if (email === 'medico@gmail.com') {
       userData = medicoUser;
-    } else if (email.value === 'admin@gmail.com') {
+    } else if (email === 'admin@gmail.com') {
       userData = adminUser;
     } else {
       console.error('Usuario de prueba no reconocido.');
@@ -56,9 +56,9 @@ export class AuthService {
     }
     this.currentUserSubject.next(userData);
     this.saveUserToLocalStorage(userData);
-    this.router.navigate(['/']); 
+    this.router.navigate(['/']);
   }
-  
+
   logout(): void {
     this.currentUserSubject.next({
       userName: '',
@@ -93,7 +93,7 @@ export class AuthService {
       this.currentUserSubject.next(userData);
     }
   }
-  
+
 }
 
 
