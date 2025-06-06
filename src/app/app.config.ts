@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
@@ -31,6 +31,7 @@ export const appConfig: ApplicationConfig = {
     FlexLayoutModule,
     MatToolbarModule,
     BrowserAnimationsModule
-  )
+  ),
+  provideAnimations()
   ]
 };

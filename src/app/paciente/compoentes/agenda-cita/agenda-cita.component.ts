@@ -1,13 +1,4 @@
 import { Component } from '@angular/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatCalendar } from '@angular/material/datepicker';
-import { FormBuilder, FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Route, Router } from '@angular/router';
-import { ServiceService } from '../../../service/service.service';
-import { CitaService } from '../../../service/cita.service';
-
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,21 +7,31 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ServiceService } from '../../../service/service.service';
+import { CitaService } from '../../../service/cita.service';
+import { SeleccionarEspecialidadComponent } from '../seleccionar-especialidad/seleccionar-especialidad.component';
+import { SeleccionarMedicoComponent } from '../seleccionar-medico/seleccionar-medico.component';
 
 @Component({
-  selector: 'app-agenda-fecha',
+  selector: 'app-agenda-cita',
   standalone: true,
-  imports: [   MatDatepickerModule,
+  imports: [MatDatepickerModule,
     MatNativeDateModule, FormsModule, CommonModule, MatStepperModule, MatFormFieldModule, MatInputModule,
-  MatSelectModule, MatCardModule, MatButtonModule, MatIconModule, FlexLayoutModule, ReactiveFormsModule],
-  templateUrl: './agenda-fecha.component.html',
-  styleUrl: './agenda-fecha.component.css'
+    MatSelectModule, MatCardModule, MatButtonModule, MatIconModule, FlexLayoutModule, ReactiveFormsModule,
+    SeleccionarEspecialidadComponent, SeleccionarMedicoComponent
+  ],
+  templateUrl: './agenda-cita.component.html',
+  styleUrl: './agenda-cita.component.css'
 })
-export class AgendaFechaComponent {
+export class AgendaCitaComponent {
 
-  formEspecialidad = this.fb.group({ especialidad: [''] });
-  formMedico = this.fb.group({ medico: [''] });
+  formEspecialidad = this.fb.group({ especialidad: ['', Validators.required] });
+  formMedico = this.fb.group({ medico: ['', Validators.required] });
   formHorario = this.fb.group({ fecha: [''], hora: [''] });
 
   especialidad: any;
@@ -39,7 +40,7 @@ export class AgendaFechaComponent {
 
 
   constructor(private router: Router, private route: ActivatedRoute, private service: ServiceService, private citaService: CitaService, private fb: FormBuilder) {
-    
+
   }
 
   onEspecialidadSeleccionada(especialidad: any) {
@@ -67,6 +68,4 @@ export class AgendaFechaComponent {
   volver() {
     this.router.navigate(['/paciente']);
   }
-
 }
-

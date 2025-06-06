@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../service/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -28,11 +30,22 @@ import { RouterModule } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  nombrePaciente = 'Juan Pérez'; // Simulado, puedes sacarlo del token
+
+
+  role: string | null = null;
+  userName = '';
 
   displayedColumns: string[] = ['medico', 'fecha', 'hora', 'estado', 'accion'];
 
-  constructor(private service: ServiceService, private citaService: CitaService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private service: ServiceService, private citaService: CitaService, private router: Router, private route: ActivatedRoute, private authService: AuthService) {
+  }
+
+  ngOnInit(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.role = user.role;
+      this.userName = user.userName;
+    });
+  }
 
   citas = [
     {

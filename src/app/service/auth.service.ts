@@ -20,7 +20,7 @@ export class AuthService {
   // BehaviorSubject para mantener el estado de autenticación del usuario
   private currentUserSubject: BehaviorSubject<UserData> =
     new BehaviorSubject<UserData>({
-      userName: '',
+      userName: "",
       role: UserRole.PACIENTE, // Valor por defecto, se sobrescribirá al iniciar sesión
       isLoggedIn: false,
     });
