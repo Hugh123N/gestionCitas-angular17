@@ -6,23 +6,20 @@ import { AppComponent } from '../../app.component';
 import { appConfig } from '../../app.config';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { merge } from 'rxjs';
 import { AuthService } from '../../service/auth.service';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    FlexLayoutModule, MatToolbarModule, MatIconModule, ReactiveFormsModule, MatSelectModule],
+    FlexLayoutModule, MatToolbarModule, MatIconModule, ReactiveFormsModule, MatSelectModule, MatOptionModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
