@@ -1,77 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { ServiceService } from '../../../service/service.service';
-import { DatePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-confirmar-cita',
   standalone: true,
-  imports: [],
+  imports: [FlexLayoutModule, MatProgressSpinnerModule, MatButtonModule, MatCardModule, CommonModule
+    
+  ],
   templateUrl: './confirmar-cita.component.html',
-  styleUrl: './confirmar-cita.component.css'
+  styleUrl: './confirmar-cita.component.css',
+  animations: [
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
-export class ConfirmarCitaComponent implements OnInit {
-  especialidad: string = '';
-  doctor: string = '';
-  idDoctor: number | null = null;
-  fecha: string = '';
-  hora: string = '';
-  pacienteId: number | null = null;
-  //almacenamos datos de paciente
-  paciente: any = {};
+export class ConfirmarCitaComponent {
+  @Input() resumenCita: any;
+  @Output() confirmar = new EventEmitter<void>();
+
+  confirmando = false;
 
   constructor(private route: ActivatedRoute,
     private router: Router, private service: ServiceService) { }
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.especialidad = params['especialidad'];
-      this.doctor = params['doctor'];
-      this.idDoctor = params['idDoctor'];
-      this.fecha = params['fecha'];
-      this.hora = params['hora'];
-      this.pacienteId = params['pacienteId'];
+  onConfirmar() {
+    this.confirmando = true;
 
-      // Llamamos al servicio para obtener los datos del paciente
-      if (this.pacienteId) {
-        this.service.getPacienteById(this.pacienteId).subscribe({
-          next: (data) => {
-            this.paciente = data; // Almacenamos los datos del paciente
-          },
-          error: (err) => {
-            console.error('Error al obtener los datos del paciente', err);
-          }
-        });
-      }
-    });
+    // Simulación de espera de API
+    setTimeout(() => {
+      this.confirmando = false;
+      this.confirmar.emit();
+    }, 1500);
   }
 
-  // Función que maneja el click en el botón "Confirmar"
-  confirmarCita() {
-    // Creamos el objeto de cita para enviar
-    const cita = {
-      pacienteId: this.pacienteId,
-      medicoId: this.idDoctor,
-      fecha: this.fecha,
-      hora: this.hora
-    };
-
-    // Llamamos al servicio para agendar la cita
-    this.service.agendarCita(cita).subscribe({
-      next: (response) => {
-        alert('Cita agendada exitosamente!');
-        this.router.navigate(['/mis-citas'], {
-          queryParams: { pacienteId: this.pacienteId }
-        });
-      },
-      error: (err) => {
-        console.error('Error al agendar la cita', err);
-        alert('Ocurrió un error al agendar la cita');
-      }
-    });
-  }
-
-  volver() {
-    this.router.navigate(['/agenda-fecha']);
-  }
 }

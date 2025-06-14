@@ -15,6 +15,9 @@ import { Subscription } from 'rxjs';
 import { AuthService } from './service/auth.service';
 import { UserRole } from './core/models/roles.enum';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -22,7 +25,7 @@ import { UserRole } from './core/models/roles.enum';
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
-    FlexLayoutModule, AppShellComponent],
+    FlexLayoutModule, AppShellComponent, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -37,7 +40,7 @@ export class AppComponent {
   // Acceso al enum de roles en el template
   UserRole = UserRole;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     // Suscribirse al BehaviorSubject del AuthService para mantener el estado actualizado

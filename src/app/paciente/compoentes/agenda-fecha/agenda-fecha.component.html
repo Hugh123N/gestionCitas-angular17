@@ -1,1 +1,35 @@
-<h2>fecha</h2>
+<form [formGroup]="formGroup">
+  <div fxLayout="column" fxLayoutGap="20px">
+
+    <!-- Fecha -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Seleccione una fecha</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha" (dateChange)="onFechaChange($event.value)">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [startAt]="hoy" [startView]="'month'"></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Horarios disponibles -->
+    <div *ngIf="horarios.length > 0">
+      <mat-label>Seleccione un horario</mat-label>
+      <mat-button-toggle-group formControlName="hora" name="horario" appearance="legacy" (change)="onHoraSeleccionada($event.value)">
+        <mat-button-toggle *ngFor="let hora of horarios" [value]="hora" 
+          [ngClass]="{'ocupado': isHoraOcupada(hora)}" [disabled]="isHoraOcupada(hora)"
+          >
+          {{ hora }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <!-- Sin horarios -->
+    <div *ngIf="horarios.length === 0 && fechaSeleccionada" class="no-horarios" fxLayoutAlign="center">
+      <mat-icon>schedule</mat-icon>
+      <span>No hay horarios disponibles para esta fecha</span>
+    </div>
+
+    <div *ngIf="cargando" fxLayoutAlign="center">
+      <mat-spinner diameter="30"></mat-spinner>
+    </div>
+
+  </div>
+</form>

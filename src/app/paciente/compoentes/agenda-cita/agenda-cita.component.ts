@@ -16,6 +16,8 @@ import { ServiceService } from '../../../service/service.service';
 import { CitaService } from '../../../service/cita.service';
 import { SeleccionarEspecialidadComponent } from '../seleccionar-especialidad/seleccionar-especialidad.component';
 import { SeleccionarMedicoComponent } from '../seleccionar-medico/seleccionar-medico.component';
+import { AgendaFechaComponent } from '../agenda-fecha/agenda-fecha.component';
+import { ConfirmarCitaComponent } from '../confirmar-cita/confirmar-cita.component';
 
 @Component({
   selector: 'app-agenda-cita',
@@ -23,7 +25,7 @@ import { SeleccionarMedicoComponent } from '../seleccionar-medico/seleccionar-me
   imports: [MatDatepickerModule,
     MatNativeDateModule, FormsModule, CommonModule, MatStepperModule, MatFormFieldModule, MatInputModule,
     MatSelectModule, MatCardModule, MatButtonModule, MatIconModule, FlexLayoutModule, ReactiveFormsModule,
-    SeleccionarEspecialidadComponent, SeleccionarMedicoComponent
+    SeleccionarEspecialidadComponent, SeleccionarMedicoComponent, AgendaFechaComponent, ConfirmarCitaComponent
   ],
   templateUrl: './agenda-cita.component.html',
   styleUrl: './agenda-cita.component.css'
@@ -32,7 +34,10 @@ export class AgendaCitaComponent {
 
   formEspecialidad = this.fb.group({ especialidad: ['', Validators.required] });
   formMedico = this.fb.group({ medico: ['', Validators.required] });
-  formHorario = this.fb.group({ fecha: [''], hora: [''] });
+  formHorario = this.fb.group({
+    fecha: ['', Validators.required],
+    hora: ['', Validators.required]
+  });
 
   especialidad: any;
   medico: any;
@@ -63,6 +68,9 @@ export class AgendaCitaComponent {
   onConfirmar() {
     // Enviar a backend la cita completa
     // Mostrar snack o redirigir
+    // Redirigir o mostrar mensaje de éxito
+    alert('Cita confirmada exitosamente');
+    this.router.navigate(['/paciente']);
   }
 
   volver() {

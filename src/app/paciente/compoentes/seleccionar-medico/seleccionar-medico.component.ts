@@ -1,5 +1,5 @@
 
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +24,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   templateUrl: './seleccionar-medico.component.html',
   styleUrl: './seleccionar-medico.component.css'
 })
-export class SeleccionarMedicoComponent implements OnInit{
+export class SeleccionarMedicoComponent implements OnChanges{
   @Input() especialidad!: any;
   @Input() formGroup!: FormGroup;
   @Output() medicoSeleccionado = new EventEmitter<any>();
@@ -32,15 +32,20 @@ export class SeleccionarMedicoComponent implements OnInit{
   medicos: any[] = [];
   cargando = true;
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['especialidad'] && this.especialidad) {
+      this.cargarMedicos();
+    }
+  }
+
+  cargarMedicos() {
+    this.cargando = true;
     // Simulación de llamada API
     setTimeout(() => {
-      if (this.especialidad) {
-        this.medicos = [
-          { id: 10, nombre: 'Dr. Juan Pérez', especialidadId: this.especialidad.id },
-          { id: 11, nombre: 'Dra. Laura Gómez', especialidadId: this.especialidad.id }
-        ];
-      }
+      this.medicos = [
+        { id: 10, nombre: 'Dr. Juan Pérez', especialidadId: this.especialidad.id },
+        { id: 11, nombre: 'Dra. Laura Gómez', especialidadId: this.especialidad.id }
+      ];
       this.cargando = false;
     }, 1000);
   }

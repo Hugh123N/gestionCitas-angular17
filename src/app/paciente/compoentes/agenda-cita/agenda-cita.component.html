@@ -17,7 +17,7 @@
     </mat-step>
 
     <mat-step label="Fecha y hora">
-      <!--<app-seleccionar-fecha-hora [medico]="medico" (horarioSeleccionado)="onHorarioSeleccionado($event)" [formGroup]="formHorario"></app-seleccionar-fecha-hora>-->
+      <app-agenda-fecha [medico]="medico" (horarioSeleccionado)="onHorarioSeleccionado($event)" [formGroup]="formHorario"></app-agenda-fecha>
       <div>
         <button mat-button matStepperPrevious>Atrás</button>
         <button mat-button matStepperNext [disabled]="formHorario.invalid">Siguiente</button>
@@ -25,7 +25,7 @@
     </mat-step>
 
     <mat-step label="Confirmar">
-      <!--<app-confirmar-cita [data]="resumenCita" (confirmar)="onConfirmar()"></app-confirmar-cita>-->
+      <app-confirmar-cita [resumenCita]="resumenCita" (confirmar)="onConfirmar()"></app-confirmar-cita>
       <div>
         <button mat-button matStepperPrevious>Atrás</button>
       </div>

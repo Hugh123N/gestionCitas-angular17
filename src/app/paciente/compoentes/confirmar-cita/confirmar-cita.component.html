@@ -1,37 +1,23 @@
-<div class="container mt-5">
-    <div class="header">
-        <h1>Sistema Gestión de Citas</h1>
-        <h3>Confirmar cita</h3>
-    </div>
-    
-    <div class="card p-4">
-        <div class="row">
-            <div class="col-md-6">
-                <h4><strong>Datos de la cita:</strong></h4>
-                <p><strong>Especialidad:</strong> {{ especialidad }}</p>
-                <p><strong>Médico:</strong> Dr. {{ doctor }}</p>
-                <p><strong>Fecha:</strong> {{ fecha }}</p>
-                <p><strong>Hora:</strong> {{ hora }}</p>
-                <p><strong>Duración:</strong> 30 min.</p>
-                <p><strong>Precio:</strong> $360.00</p>
-            </div>
-            <div class="col-md-6">
-                <h4><strong>Datos del paciente:</strong></h4>
-                <p><strong>Paciente:</strong> {{ paciente.nombre }}</p>
-                <p><strong>Apellidos:</strong> {{ paciente.apellido }}</p>
-                <p><strong>Dni:</strong>{{ paciente.dni }}</p>
-                <p><strong>Telefono:</strong> {{ paciente.telefono }}</p>
-                
-            </div>
-        </div>
-        
-        <div class="row mt-4">
-            <div class="col-md-6 text-start">
-                <button class="btn btn-secondary" (click)="volver()">Volver</button>
-            </div>
-            <div class="col-md-6 text-end">
-                <button class="btn btn-primary" (click)="confirmarCita()">Confirmar</button>
-            </div>
-        </div>
-    </div>
+<div [@fadeInUp]>
+  <mat-card class="resumen-card">
+    <mat-card-header>
+      <mat-card-title>Resumen de tu cita médica</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div><strong>Especialidad:</strong> {{ resumenCita?.especialidad?.nombre }}</div>
+        <div><strong>Médico:</strong> {{ resumenCita?.medico?.nombre }}</div>
+        <div><strong>Fecha:</strong> {{ resumenCita?.fecha | date:'fullDate' }}</div>
+        <div><strong>Hora:</strong> {{ resumenCita?.hora }}</div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions fxLayout="row" fxLayoutAlign="end center">
+      <button mat-flat-button color="primary" (click)="onConfirmar()" [disabled]="confirmando">
+        <mat-spinner *ngIf="confirmando" diameter="20"></mat-spinner>
+        <span *ngIf="!confirmando">Confirmar Cita</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>
