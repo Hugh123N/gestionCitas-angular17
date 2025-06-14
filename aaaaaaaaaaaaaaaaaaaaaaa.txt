@@ -1,0 +1,23 @@
+--------en app.component.html agregue 2 nuevas listas en la parte del head.. lo que agregue fe de parte del "medico"  cetas-MiAgenda
+
+
+
+--------cree la carpeta settings e interfaz
+
+
+
+
+------------en la carpeta service : genere un codigo en el termianr ->   ng g s service/citapendiente --skip-tests
+
+  private http = inject(HttpClient);
+  private baseUrl: string = appsettings.apiUrl
+
+  constructor() { }
+
+
+  lista(): Observable<ResponseCitaMedica> {
+    return this.http.get<ResponseCitaMedica>(`${this.baseUrl}citaMedica/Lista`)
+  }
+
+
+------------luego realice lo avanzado en medico.......

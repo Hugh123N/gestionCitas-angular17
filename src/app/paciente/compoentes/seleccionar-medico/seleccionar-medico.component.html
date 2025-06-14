@@ -1,0 +1,14 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Seleccione un médico</mat-label>
+    <mat-select formControlName="medico" (selectionChange)="onChange($event.value)">
+      <mat-option *ngFor="let m of medicos" [value]="m.id">
+        {{ m.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngIf="cargando" fxLayoutAlign="center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+</div>

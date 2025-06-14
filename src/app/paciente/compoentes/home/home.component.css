@@ -1,0 +1,22 @@
+.estado-confirmada {
+  color: green;
+  font-weight: bold;
+}
+
+.estado-pendiente {
+  color: orange;
+  font-weight: bold;
+}
+
+.estado-cancelada {
+  color: red;
+  font-weight: bold;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}

@@ -1,0 +1,37 @@
+<!-- calendario.component.html -->
+<div class="calendario-container">
+    <h2 class="titulo">Agenda de Ana Garcia</h2>
+
+    <div class="barra-controles">
+        <button (click)="mesAnterior()">Anterior</button>
+        <div class="fecha-actual" (click)="mostrarSelector = !mostrarSelector">
+            {{ obtenerNombreMes(mesSeleccionado) }} de {{ anioSeleccionado }}
+        </div>
+        <button (click)="mesSiguiente()">Siguiente</button>
+    </div>
+
+    <div *ngIf="mostrarSelector" class="selector-fecha">
+        <select [(ngModel)]="mesSeleccionado" (change)="generarCalendario()">
+            <option *ngFor="let mes of meses; let i = index" [value]="i">{{ mes }}</option>
+        </select>
+        <input type="number" [(ngModel)]="anioSeleccionado" (change)="generarCalendario()">
+        <button (click)="mostrarSelector = false">Cerrar</button>
+    </div>
+
+    <div class="tabla-calendario">
+        <div class="dia encabezado" *ngFor="let d of diasSemana">{{ d }}</div>
+        <div *ngFor="let i of diasEnCalendario" class="dia" [class.actual]="esDiaDelMesActual(i)"
+            [class.con-cita]="tieneCitas(i)" (mouseenter)="mostrarTooltip(i, $event)" (mouseleave)="ocultarTooltip()">
+            {{ i > 0 ? i : '' }}
+        </div>
+    </div>
+
+    <div *ngIf="tooltipVisible" class="tooltip" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
+        <strong>Citas del día {{ tooltipDia }}</strong><br>
+        <ng-container *ngFor="let cita of citasDelDia">
+            <p><strong>Paciente:</strong> {{ cita.nombre }}</p>
+            <p><strong>Hora:</strong> {{ cita.horario }} ({{ cita.duracion }})</p>
+            <p><strong>Cita:</strong> {{ cita.estado }}</p>
+        </ng-container>
+    </div>
+</div>

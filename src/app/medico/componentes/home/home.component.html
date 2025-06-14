@@ -1,0 +1,35 @@
+<div class="contenedor">
+    <div class="panel" *ngIf="!citaSeleccionada">
+        <h2 class="titulo">Citas Pendientes</h2>
+
+        <div class="tarjeta" *ngFor="let cita of citas" (click)="verDetalle(cita)">
+            <h3 class="tarjeta-titulo">{{ cita.tratamiento }}</h3>
+            <p class="paciente">Paciente: {{ cita.nombre }}</p>
+            <div class="fila">
+                <span>{{ cita.fecha }}</span>
+                <span>{{ cita.horario }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-detalle" *ngIf="citaSeleccionada">
+        <h2 class="titulo-detalle">Detalles de Cita {{ citaSeleccionada.id }}</h2>
+        <button class="btn-regresar" (click)="regresar()">Regresar a la lista</button>
+
+        <div class="grid-datos">
+            <div><strong>Tratamiento:</strong><br> {{ citaSeleccionada.tratamiento }}</div>
+            <div><strong>Fecha:</strong><br> {{ citaSeleccionada.fecha }}</div>
+            <div><strong>Hora:</strong><br> {{ citaSeleccionada.horario }}</div>
+            <div><strong>Duración (min):</strong><br> {{ citaSeleccionada.duracion }}</div>
+            <div><strong>Médico:</strong><br> {{ citaSeleccionada.medico }}</div>
+            <div><strong>Paciente:</strong><br> {{ citaSeleccionada.nombre }}</div>
+            <div><strong>Estado:</strong><br> <span class="estado">{{ citaSeleccionada.estado }}</span></div>
+            <div class="nota"><strong>Notas:</strong><br> {{ citaSeleccionada.notas }}</div>
+        </div>
+
+        <div class="botones">
+            <button class="btn-editar">Editar Cita</button>
+            <button class="btn-cancelar">Cancelar Cita</button>
+        </div>
+    </div>
+</div>

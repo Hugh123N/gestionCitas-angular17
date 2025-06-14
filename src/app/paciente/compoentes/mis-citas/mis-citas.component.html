@@ -1,0 +1,44 @@
+<div class="container mt-5">
+    <div class="header">
+        <h1>Sistema Gestión de Citas</h1>
+        <h3>Mis citas</h3>
+    </div>
+    
+    <div class="card p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div *ngIf="citas.length > 0; else sinCitas">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Médico</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cita of citas">
+                                <td>{{ cita.fecha }}</td>
+                                <td>{{ cita.hora }}</td>
+                                <td>{{ cita.medico.nombre }}</td>
+                                <td>{{ cita.estado }}</td>
+                                <td><button class="btn btn-warning">Cancelar cita</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template #sinCitas>
+                    <p class="text-muted">No tienes citas registradas.</p>
+                </ng-template>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6 text-start">
+                <button class="btn btn-secondary" (click)="volver()">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>

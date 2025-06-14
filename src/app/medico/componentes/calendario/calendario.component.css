@@ -1,0 +1,93 @@
+.calendario-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 900px;
+    margin: auto;
+}
+
+.titulo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.barra-controles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.barra-controles button {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fecha-actual {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.selector-fecha {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tabla-calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.dia {
+    background-color: #d3d3d3;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.dia.actual {
+    background-color: #ffffff;
+}
+
+.dia.con-cita::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background-color: #e91e63;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dia:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.encabezado {
+    font-weight: bold;
+    background-color: #ccc;
+}
+
+.tooltip {
+    position: fixed;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
