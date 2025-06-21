@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AppComponent } from './app.component'; 
 import { LoginComponent } from './auth/login/login.component';
 import { RoleGuard } from './core/guards/role.guard';
+import { NoAuthorizeComponent } from './auth/no-authorize/no-authorize.component';
 
 export const routes: Routes = [
 
@@ -38,6 +39,6 @@ export const routes: Routes = [
       }
     ]
   },
-
+  { path: 'Unauthorize', component: NoAuthorizeComponent },
   { path: '**', redirectTo: 'login' }
 ];

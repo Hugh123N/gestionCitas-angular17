@@ -100,7 +100,7 @@ export class LoginComponent {
     }
 
     const { email, password } = this.loginForm.value;
-    
+
     this.authService.login(email!, password!).subscribe({
     next: () => {
       console.log('Login exitoso');
@@ -110,4 +110,8 @@ export class LoginComponent {
     }
   });
   }
+
+  volverInicio() {
+  this.router.navigate(['/']);
+}
 }

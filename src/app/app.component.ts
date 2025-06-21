@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { NgIf } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -17,6 +17,7 @@ import { UserRole } from './core/models/roles.enum';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DashboardComponent } from './auth/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
-    FlexLayoutModule, AppShellComponent, MatDatepickerModule, MatNativeDateModule],
+    FlexLayoutModule, AppShellComponent, MatDatepickerModule, MatNativeDateModule, DashboardComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -40,7 +41,11 @@ export class AppComponent {
   // Acceso al enum de roles en el template
   UserRole = UserRole;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
+
+  navegar(ruta: string) {
+    this.router.navigate([`/${ruta}`]);
+  }
 
   ngOnInit(): void {
     // Suscribirse al BehaviorSubject del AuthService para mantener el estado actualizado

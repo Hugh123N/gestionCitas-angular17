@@ -1,3 +1,12 @@
+<button
+  class="btn-back"
+  (click)="volverInicio()"
+  *ngIf="!mostrarRegistro"
+  mat-icon-button
+>
+  <mat-icon>arrow_back</mat-icon>
+</button>
+
 <div fxLayout="column" fxLayoutAlign="center center" class="login-container">
   <mat-card class="login-card">
     <mat-card-header fxLayoutAlign="center center" class="login-header" style="height: 15%;">

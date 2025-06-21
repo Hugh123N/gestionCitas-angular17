@@ -121,7 +121,19 @@ input.example-right-align {
   -moz-appearance: textfield;
 }
 
-/*email*/
 .example-container mat-form-field + mat-form-field {
   margin-left: 8px;
+}
+
+/*btn back*/
+
+.btn-back {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 10;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  padding: 6px;
 }

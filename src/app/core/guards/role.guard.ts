@@ -18,7 +18,7 @@ export const RoleGuard: CanMatchFn = (
   if (!authService.isLoggedIn()) {
     // Si el usuario no está logueado, redirigir al login
     console.warn('Acceso denegado: Usuario no autenticado.');
-    router.navigate(['/login']);
+    router.navigate(['/']);
     return false;
   }
 
@@ -50,7 +50,7 @@ export const RoleGuard: CanMatchFn = (
       ', '
     )}`
   );
-  router.navigate(['/']); // Redirigir a una página por defecto, o una página de "acceso denegado"
+  router.navigate(['/Unauthorize']);
   return false;
 
 };
