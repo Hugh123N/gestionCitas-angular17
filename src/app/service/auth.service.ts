@@ -54,10 +54,16 @@ export class AuthService {
             isLoggedIn: true,
             token: response.token,
           };
+          var ruta;
+          if(userData.role === 'Paciente'){
+            ruta = 'paciente'
+          }else if(userData.role === 'Medico')
+            ruta = 'medico'
 
         this.currentUserSubject.next(userData);
         this.saveUserToLocalStorage(userData);
-        this.router.navigate(['/']);
+        this.router.navigate([`/${ruta}`]);
+
       }),
       catchError((error) => {
         console.error('Error en login:', error);

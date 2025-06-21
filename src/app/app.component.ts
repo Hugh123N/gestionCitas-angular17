@@ -43,10 +43,6 @@ export class AppComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  navegar(ruta: string) {
-    this.router.navigate([`/${ruta}`]);
-  }
-
   ngOnInit(): void {
     // Suscribirse al BehaviorSubject del AuthService para mantener el estado actualizado
     this.authSubscription = this.authService.currentUser$.subscribe(user => {
@@ -66,6 +62,4 @@ export class AppComponent {
   logout() {
     this.authService.logout();
   }
-
-
 }
