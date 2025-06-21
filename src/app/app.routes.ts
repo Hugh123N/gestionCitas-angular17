@@ -14,14 +14,14 @@ export const routes: Routes = [
         path: 'paciente',
         loadChildren: () =>
           import('./paciente/paciente.routes').then(m => m.pacienteRoutes),
-          data: { roles: ['PACIENTE', 'ADMIN'] },
+          data: { roles: ['Paciente', 'Admin'] },
           canMatch: [RoleGuard]
       },
       {
         path: 'medico',
         loadChildren: () =>
           import('./medico/medico.routes').then(m => m.medicoRoutes),
-          data: { roles: ['MEDICO', 'ADMIN'] },
+          data: { roles: ['Medico', 'Admin'] },
           canMatch: [RoleGuard]
       },
       /*{

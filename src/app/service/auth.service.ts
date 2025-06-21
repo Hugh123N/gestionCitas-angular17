@@ -1,13 +1,16 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { UserRole } from '../core/models/roles.enum';
 import { FormControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
 
 interface UserData {
   userName: string;
   role: UserRole;
   isLoggedIn: boolean;
+  token: string;
 }
 
 @Injectable({
@@ -15,48 +18,52 @@ interface UserData {
 })
 export class AuthService {
 
+  private apiUrl = 'http://localhost:8080'; 
+  private http = inject(HttpClient);
   private router = inject(Router);
 
   // BehaviorSubject para mantener el estado de autenticación del usuario
   private currentUserSubject: BehaviorSubject<UserData> =
     new BehaviorSubject<UserData>({
       userName: "",
-      role: UserRole.PACIENTE, // Valor por defecto, se sobrescribirá al iniciar sesión
+      role: UserRole.PACIENTE,
       isLoggedIn: false,
+      token: ""
     });
 
-  public currentUser$: Observable<UserData> =
-    this.currentUserSubject.asObservable();
+  public currentUser$: Observable<UserData> = this.currentUserSubject.asObservable();
 
   constructor() {
     // Intentar cargar la información del usuario del localStorage al iniciar el servicio
     this.loadUserFromLocalStorage();
   }
 
-  /**
-   * Simula el inicio de sesión. En un proyecto real, esto haría una llamada a una API
-   * y almacenaría el token y la información del usuario.
-   * @param username El nombre de usuario.
-   * @param password La contraseña.
-   * @param role El rol del usuario (para simulación).
-   */
-  login(email: string, password: string): void {
-    // Lógica real: Llamada a la API de login
-    // Si la autenticación es exitosa:
-    let userData: UserData;
-    if (email === "paciente@gmail.com") {
-      userData = pacienteUser;
-    } else if (email === 'medico@gmail.com') {
-      userData = medicoUser;
-    } else if (email === 'admin@gmail.com') {
-      userData = adminUser;
-    } else {
-      console.error('Usuario de prueba no reconocido.');
-      return;
-    }
-    this.currentUserSubject.next(userData);
-    this.saveUserToLocalStorage(userData);
-    this.router.navigate(['/']);
+  login(email: string, contrasenia: string): Observable<any> {
+    return this.http
+      .post<any>(`${this.apiUrl}/login`, { email, contrasenia })
+      .pipe(
+        tap((response) => {
+          console.log('LOGIN RESPONSE:', response); 
+          if (!response.usuario || !response.token) {
+          throw new Error('Respuesta inválida del servidor');
+        }
+          
+          const userData: UserData = {
+            userName: response.usuario.nombre + ' ' + response.usuario.apellido,
+            role: response.usuario.rol as UserRole,
+            isLoggedIn: true,
+            token: response.token,
+          };
+
+        this.currentUserSubject.next(userData);
+        this.saveUserToLocalStorage(userData);
+        this.router.navigate(['/']);
+      }),
+      catchError((error) => {
+        console.error('Error en login:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   logout(): void {
@@ -64,9 +71,14 @@ export class AuthService {
       userName: '',
       role: UserRole.PACIENTE, // Valor por defecto, o null si prefieres
       isLoggedIn: false,
+      token: ""
     });
     localStorage.removeItem('currentUser');
     this.router.navigate(['/login']);
+  }
+
+  getToken(): string {
+    return this.currentUserSubject.value.token;
   }
 
   getUserRole(): UserRole {
@@ -81,11 +93,11 @@ export class AuthService {
     return this.currentUserSubject.value.isLoggedIn;
   }
 
-  //guarda informacion en local storage
+  //guarda userData en local storage
   private saveUserToLocalStorage(userData: UserData): void {
     localStorage.setItem('currentUser', JSON.stringify(userData));
   }
-  // obtiene informacion de localstorage
+  // obtiene userData de localstorage
   private loadUserFromLocalStorage(): void {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
@@ -96,29 +108,6 @@ export class AuthService {
 
 }
 
-
-const pacienteUser = {
-  userName: 'Ana Garcia',
-  email: "paciente@gmail.com",
-  role: UserRole.PACIENTE,
-  isLoggedIn: true,
-};
-
-// Objeto de prueba para un Médico
-const medicoUser = {
-  userName: 'Dr. Carlos Lopez',
-  email: 'medico@gmail.com',
-  role: UserRole.MEDICO,
-  isLoggedIn: true,
-};
-
-// Objeto de prueba para un Administrador
-const adminUser = {
-  userName: 'Admin Global',
-  email: 'admin@gmail.com',
-  role: UserRole.ADMIN,
-  isLoggedIn: true,
-};
 
 
 

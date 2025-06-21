@@ -98,7 +98,16 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     }
+
     const { email, password } = this.loginForm.value;
-    this.authService.login(email!, password!);
+    
+    this.authService.login(email!, password!).subscribe({
+    next: () => {
+      console.log('Login exitoso');
+    },
+    error: (err) => {
+      console.error('Error al iniciar sesión:', err);
+    }
+  });
   }
 }

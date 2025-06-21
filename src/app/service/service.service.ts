@@ -16,12 +16,7 @@ export class ServiceService {
   registerUser(usuario: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/usuario/save`, usuario);
   }
-
-  // Iniciar sesión
-  loginUser(usuario: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuario/login`, usuario);
-  }
-
+  
   // ======================== ESPECIALIDADES ========================
   // Obtener todas las especialidades
   getEspecialidades(): Observable<any> {
