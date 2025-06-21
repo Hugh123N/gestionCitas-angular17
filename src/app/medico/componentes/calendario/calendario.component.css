@@ -1,0 +1,112 @@
+.calendario-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 900px;
+    margin: auto;
+}
+
+.titulo {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.barra-controles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.barra-controles button {
+    background: #e91e63;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fecha-actual {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.selector-fecha {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tabla-calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.dia {
+    background: #f5f5f5;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dia:hover {
+    background: #e0e0e0;
+}
+
+.encabezado {
+    font-weight: bold;
+    background: #ccc;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.dia.actual {
+    border: 2px solid #e91e63;
+}
+
+.dia.con-cita {
+    background: #f8bbd0;
+}
+
+.numero {
+    font-weight: bold;
+}
+
+.panel-citas {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.card-cita {
+    background: #fafafa;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cerrar {
+    background: #ccc;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -1,0 +1,40 @@
+<p>calendario works!</p>
+<div class="calendario-container">
+    <h2 class="titulo">Agenda de Ana García</h2>
+
+    <div class="barra-controles">
+        <button (click)="mesAnterior()">Anterior</button>
+        <div class="fecha-actual" (click)="mostrarSelector = !mostrarSelector">
+            {{ obtenerNombreMes(mesSeleccionado) }} de {{ anioSeleccionado }}
+        </div>
+        <button (click)="mesSiguiente()">Siguiente</button>
+    </div>
+
+    <div *ngIf="mostrarSelector" class="selector-fecha">
+        <select [(ngModel)]="mesSeleccionado" (change)="recargarCalendario()">
+            <option *ngFor="let mes of meses; let i = index" [value]="i">{{ mes }}</option>
+        </select>
+        <input type="number" [(ngModel)]="anioSeleccionado" (change)="recargarCalendario()" />
+        <button (click)="mostrarSelector = false">Cerrar</button>
+    </div>
+
+    <div class="tabla-calendario">
+        <div class="dia encabezado" *ngFor="let d of diasSemana">{{ d }}</div>
+        <div *ngFor="let dia of diasEnCalendario" class="dia"
+            [class.actual]="dia === hoy && mesSeleccionado === hoyMes && anioSeleccionado === hoyAnio"
+            [class.con-cita]="tieneCitas(dia)" (click)="seleccionarDia(dia)">
+            <span class="numero">{{ dia > 0 ? dia : '' }}</span>
+        </div>
+    </div>
+
+    <!-- Panel emergente mejorado -->
+    <div *ngIf="diaSeleccionadoConCitas" class="panel-citas">
+        <h3>Citas del {{ diaSeleccionado }} de {{ obtenerNombreMes(mesSeleccionado) }}</h3>
+        <div *ngFor="let cita of citasDelDia" class="card-cita">
+            <strong>{{ cita.nombre }}</strong>
+            <p>{{ cita.horario }} · {{ cita.duracion }} min · <em>{{ cita.estado }}</em></p>
+            <p>{{ cita.tratamiento }}</p>
+        </div>
+        <button class="btn-cerrar" (click)="clearSeleccion()">Cerrar</button>
+    </div>
+</div>

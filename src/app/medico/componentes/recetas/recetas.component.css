@@ -1,0 +1,150 @@
+/* ← BORRA TODO LO ANTERIOR Y PEGA ESTO */
+
+.panel-citas {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: auto;
+}
+
+.titulo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.card-cita {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    border-left: 4px solid #e91e63;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-cita .info h3 {
+    color: #e91e63;
+    margin: 0;
+    font-size: 18px;
+}
+
+.card-cita .info p {
+    margin: 5px 0;
+    color: #444;
+}
+
+.card-cita .acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-cita .acciones button {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.card-cita .acciones button:hover {
+    background-color: #d81b60;
+}
+
+.panel-formulario,
+.panel-receta {
+    background: #fff;
+    padding: 25px;
+    margin-top: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.panel-formulario h3,
+.panel-receta h3 {
+    color: #e91e63;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.botones {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.botones button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-confirmar {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-cancelar {
+    background-color: #f44336;
+    color: white;
+}
+
+.botones button:hover {
+    opacity: 0.9;
+}
+
+
+.btn-eliminar {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-eliminar:hover {
+    background-color: #d32f2f;
+}
+
+.input-busqueda {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    margin: 10px auto 20px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}

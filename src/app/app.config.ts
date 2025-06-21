@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
@@ -30,6 +31,7 @@ export const appConfig: ApplicationConfig = {
     MatCardModule,
     FlexLayoutModule,
     MatToolbarModule,
+    FormsModule,//aqui añadi Fernando
     BrowserAnimationsModule
   ),
   provideAnimations()

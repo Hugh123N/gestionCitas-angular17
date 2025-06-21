@@ -1,1 +1,132 @@
-<p>home works!</p>
+<div class="contenedor">
+    <!-- Lista de citas -->
+    <div class="panel" *ngIf="!citaSeleccionada">
+        <h2 class="titulo">Citas Pendientes</h2>
+        <button (click)="filtrarPendientes()" class="btn-editar" style="margin-bottom: 1rem;">
+            Mostrar solo pendientes
+        </button>
+        <button *ngIf="filtroPendientesActivo" (click)="quitarFiltro()" class="btn-cancelar" style="margin-left: 1rem;">
+            Quitar filtro
+        </button>
+        <div class="tarjeta" *ngFor="let cita of citasFiltradas" (click)="verDetalle(cita)">
+            <h3 class="tarjeta-titulo">{{ cita.tratamiento }}</h3>
+            <p class="paciente">Paciente: {{ cita.nombre }}</p>
+            <div class="fila">
+                <span>{{ cita.fecha }}</span>
+                <span>{{ cita.horario }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detalle de cita -->
+    <div class="panel-detalle" *ngIf="citaSeleccionada && !mostrarConfirmacion && !modoConfirmarCancelacion">
+        <h2 class="titulo-detalle">Detalles de Cita {{ citaSeleccionada.id }}</h2>
+        <button class="btn-regresar" (click)="regresar()">Regresar a la lista</button>
+
+        <div class="grid-datos">
+            <!-- Tratamiento -->
+            <div>
+                <strong>Tratamiento:</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.tratamiento }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <input [(ngModel)]="tratamientoEditado" />
+                </ng-container>
+            </div>
+
+            <!-- Fecha -->
+            <div>
+                <strong>Fecha:</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.fecha }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <input type="date" [(ngModel)]="fechaEditada" />
+                </ng-container>
+            </div>
+
+            <!-- Hora -->
+            <div>
+                <strong>Hora:</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.horario }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <input type="time" [(ngModel)]="horaEditada" />
+                </ng-container>
+            </div>
+
+            <!-- Duración -->
+            <div>
+                <strong>Duración (min):</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.duracion }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <input type="number" [(ngModel)]="duracionEditada" />
+                </ng-container>
+            </div>
+
+            <!-- Médico -->
+            <div>
+                <strong>Médico:</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.medico }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <input [(ngModel)]="medicoEditado" />
+                </ng-container>
+            </div>
+
+            <!-- Paciente -->
+            <div>
+                <strong>Paciente:</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.nombre }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <input [(ngModel)]="pacienteEditado" />
+                </ng-container>
+            </div>
+
+            <!-- Estado -->
+            <div>
+                <strong>Estado:</strong><br>
+                <ng-container *ngIf="!modoEdicion">
+                    <span class="estado">{{ citaSeleccionada.estado }}</span>
+                </ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <select [(ngModel)]="estadoEditado">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Finalizada">Finalizada</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </ng-container>
+            </div>
+
+            <!-- Notas -->
+            <div class="nota">
+                <strong>Notas:</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.notas }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <textarea [(ngModel)]="notasEditadas" rows="3"></textarea>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="botones">
+            <button *ngIf="!modoEdicion" class="btn-editar" (click)="activarEdicion()">Editar Cita</button>
+            <button *ngIf="!modoEdicion" class="btn-cancelar" (click)="cancelarCita()">Cancelar Cita</button>
+
+            <button *ngIf="modoEdicion" class="btn-editar" (click)="confirmarEdicion()">Confirmar</button>
+            <button *ngIf="modoEdicion" class="btn-cancelar" (click)="cancelarEdicion()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Confirmación edición -->
+    <div class="panel-detalle" *ngIf="mostrarConfirmacion">
+        <h2 class="titulo-detalle">¿Deseas guardar los cambios?</h2>
+        <div class="botones" style="justify-content: center;">
+            <button class="btn-editar" (click)="ejecutarEdicion()">Confirmar</button>
+            <button class="btn-cancelar" (click)="cancelarEdicion()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Confirmación cancelación -->
+    <div class="panel-detalle" *ngIf="modoConfirmarCancelacion">
+        <h2 class="titulo-detalle">¿Deseas marcar esta cita como finalizada?</h2>
+        <div class="botones" style="justify-content: center;">
+            <button class="btn-editar" (click)="ejecutarCancelacion()">Confirmar</button>
+            <button class="btn-cancelar" (click)="cancelarCancelacion()">Cancelar</button>
+        </div>
+    </div>
+</div>
