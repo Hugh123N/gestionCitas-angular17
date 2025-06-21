@@ -14,7 +14,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceService } from '../../../service/service.service';
 import { CitaService } from '../../../service/cita.service';
-import { SeleccionarEspecialidadComponent } from '../seleccionar-especialidad/seleccionar-especialidad.component';
 import { SeleccionarMedicoComponent } from '../seleccionar-medico/seleccionar-medico.component';
 import { AgendaFechaComponent } from '../agenda-fecha/agenda-fecha.component';
 import { ConfirmarCitaComponent } from '../confirmar-cita/confirmar-cita.component';
@@ -25,31 +24,25 @@ import { ConfirmarCitaComponent } from '../confirmar-cita/confirmar-cita.compone
   imports: [MatDatepickerModule,
     MatNativeDateModule, FormsModule, CommonModule, MatStepperModule, MatFormFieldModule, MatInputModule,
     MatSelectModule, MatCardModule, MatButtonModule, MatIconModule, FlexLayoutModule, ReactiveFormsModule,
-    SeleccionarEspecialidadComponent, SeleccionarMedicoComponent, AgendaFechaComponent, ConfirmarCitaComponent
+    SeleccionarMedicoComponent, AgendaFechaComponent, ConfirmarCitaComponent
   ],
   templateUrl: './agenda-cita.component.html',
   styleUrl: './agenda-cita.component.css'
 })
 export class AgendaCitaComponent {
 
-  formEspecialidad = this.fb.group({ especialidad: ['', Validators.required] });
   formMedico = this.fb.group({ medico: ['', Validators.required] });
   formHorario = this.fb.group({
     fecha: ['', Validators.required],
     hora: ['', Validators.required]
   });
 
-  especialidad: any;
   medico: any;
   resumenCita: any;
 
 
   constructor(private router: Router, private route: ActivatedRoute, private service: ServiceService, private citaService: CitaService, private fb: FormBuilder) {
 
-  }
-
-  onEspecialidadSeleccionada(especialidad: any) {
-    this.especialidad = especialidad;
   }
 
   onMedicoSeleccionado(medico: any) {
@@ -59,7 +52,6 @@ export class AgendaCitaComponent {
 
   onHorarioSeleccionado(data: { fecha: string; hora: string }) {
     this.resumenCita = {
-      especialidad: this.especialidad,
       medico: this.medico,
       ...data
     };

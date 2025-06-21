@@ -24,27 +24,20 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   templateUrl: './seleccionar-medico.component.html',
   styleUrl: './seleccionar-medico.component.css'
 })
-export class SeleccionarMedicoComponent implements OnChanges{
-  @Input() especialidad!: any;
+export class SeleccionarMedicoComponent implements OnInit{
   @Input() formGroup!: FormGroup;
   @Output() medicoSeleccionado = new EventEmitter<any>();
 
   medicos: any[] = [];
   cargando = true;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['especialidad'] && this.especialidad) {
-      this.cargarMedicos();
-    }
-  }
-
-  cargarMedicos() {
+  ngOnInit() {
     this.cargando = true;
     // Simulación de llamada API
     setTimeout(() => {
       this.medicos = [
-        { id: 10, nombre: 'Dr. Juan Pérez', especialidadId: this.especialidad.id },
-        { id: 11, nombre: 'Dra. Laura Gómez', especialidadId: this.especialidad.id }
+        { id: 10, nombre: 'Dr. Juan Pérez', especialidad: 'Dermatologo' },
+        { id: 11, nombre: 'Dra. Laura Gómez', especialidad: 'Odontologo' }
       ];
       this.cargando = false;
     }, 1000);

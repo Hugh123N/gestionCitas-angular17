@@ -1,17 +1,9 @@
 <mat-card>
   <h2>🩺 Agendar nueva cita</h2>
   <mat-horizontal-stepper [linear]="true" #stepper>
-    <mat-step label="Especialidad">
-      <app-seleccionar-especialidad (especialidadSeleccionada)="onEspecialidadSeleccionada($event)" [formGroup]="formEspecialidad"></app-seleccionar-especialidad>
-      <div>
-        <button mat-button matStepperNext [disabled]="formEspecialidad.invalid">Siguiente</button>
-      </div>
-    </mat-step>
-
     <mat-step label="Médico">
-      <app-seleccionar-medico [especialidad]="especialidad" (medicoSeleccionado)="onMedicoSeleccionado($event)" [formGroup]="formMedico"></app-seleccionar-medico>
+      <app-seleccionar-medico (medicoSeleccionado)="onMedicoSeleccionado($event)" [formGroup]="formMedico"></app-seleccionar-medico>
       <div>
-        <button mat-button matStepperPrevious>Atrás</button>
         <button mat-button matStepperNext [disabled]="formMedico.invalid">Siguiente</button>
       </div>
     </mat-step>
