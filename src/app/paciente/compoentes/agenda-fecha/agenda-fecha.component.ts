@@ -18,6 +18,7 @@ import { CitaService } from '../../../service/cita.service';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-agenda-fecha',
@@ -50,12 +51,17 @@ export class AgendaFechaComponent implements OnInit {
     if (fecha < this.hoy) {
       // Resetear si eligió una fecha inválida
       this.formGroup.get('fecha')?.setValue(null);
-      alert('No se puede seleccionar una fecha anterior a hoy');
+        Swal.fire({
+        icon: 'error',
+        title: 'Fecha inválida',
+        text: 'No se puede seleccionar una fecha anterior a hoy.',
+        confirmButtonText: 'Entendido',
+      });
       return;
     }
 
     this.fechaSeleccionada = fecha;
-    this.formGroup.get('hora')?.reset(); // Limpiar hora si cambia fecha
+    this.formGroup.get('hora')?.reset(); // Limpia hora si cambia fecha
     this.cargarHorariosDisponibles(fecha);
   }
 

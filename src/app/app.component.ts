@@ -18,6 +18,7 @@ import { UserRole } from './core/models/roles.enum';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DashboardComponent } from './auth/dashboard/dashboard.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -60,6 +61,24 @@ export class AppComponent {
   }
 
   logout() {
-    this.authService.logout();
+      Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: '¿Estás seguro de que deseas salir?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.authService.logout();
+        Swal.fire(
+          'Sesión cerrada',
+          'Has cerrado sesión correctamente.',
+          'success'
+        );
+      }
+    });
   }
 }

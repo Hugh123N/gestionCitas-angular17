@@ -17,6 +17,7 @@ import { CitaService } from '../../../service/cita.service';
 import { SeleccionarMedicoComponent } from '../seleccionar-medico/seleccionar-medico.component';
 import { AgendaFechaComponent } from '../agenda-fecha/agenda-fecha.component';
 import { ConfirmarCitaComponent } from '../confirmar-cita/confirmar-cita.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-agenda-cita',
@@ -61,8 +62,15 @@ export class AgendaCitaComponent {
     // Enviar a backend la cita completa
     // Mostrar snack o redirigir
     // Redirigir o mostrar mensaje de éxito
-    alert('Cita confirmada exitosamente');
-    this.router.navigate(['/paciente']);
+    Swal.fire({
+      icon: 'success',
+      title: '¡Cita confirmada!',
+      text: 'Tu cita ha sido registrada exitosamente.',
+      confirmButtonText: 'Ir al panel',
+      confirmButtonColor: '#3085d6'
+    }).then(() => {
+      this.router.navigate(['/paciente']);
+    });
   }
 
   volver() {

@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RoleGuard } from './core/guards/role.guard';
 import { NoAuthorizeComponent } from './auth/no-authorize/no-authorize.component';
+import { DashboardComponent } from './auth/dashboard/dashboard.component';
 
 export const routes: Routes = [
 
