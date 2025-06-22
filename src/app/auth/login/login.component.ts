@@ -21,6 +21,10 @@ import { AuthService } from '../../service/auth.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -29,7 +33,7 @@ import { MatOptionModule } from '@angular/material/core';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    FlexLayoutModule, MatToolbarModule, MatIconModule, ReactiveFormsModule, MatSelectModule, MatOptionModule],
+    FlexLayoutModule, MatToolbarModule, MatIconModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,7 +58,11 @@ export class LoginComponent {
     sexo: new FormControl('', [Validators.required]),
     telefono: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
-    contrasenia: new FormControl('', [Validators.required, Validators.minLength(6)])
+    contrasenia: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    fechaNacimiento: new FormControl('', [Validators.required]),
+    talla: new FormControl('', [Validators.required]),
+    grupoSanguineo: new FormControl('', [Validators.required]),
+    direccion: new FormControl('')
   });
 
   errorMessage = signal('');
@@ -81,10 +89,17 @@ export class LoginComponent {
     }
 
     const nuevoUsuario = this.registroForm.value;
-    this.service.registerUser(nuevoUsuario).subscribe({
+    this.service.registrarPaciente(nuevoUsuario).subscribe({
       next: () => {
-        alert('Usuario registrado exitosamente');
-        this.alternarFormulario(new Event('click')); // volver al login
+        Swal.fire({
+          icon: 'success',
+          title: '¡Registro exitoso!',
+          text: 'Tu cuenta ha sido creada correctamente.',
+          confirmButtonText: 'Ir al login',
+          confirmButtonColor: '#1976d2'
+        }).then(() => {
+          this.alternarFormulario(new Event('click')); // Volver al login
+        });
       },
       error: err => {
         console.error(err);
@@ -102,16 +117,16 @@ export class LoginComponent {
     const { email, password } = this.loginForm.value;
 
     this.authService.login(email!, password!).subscribe({
-    next: () => {
-      console.log('Login exitoso');
-    },
-    error: (err) => {
-      console.error('Error al iniciar sesión:', err);
-    }
-  });
+      next: () => {
+        console.log('Login exitoso');
+      },
+      error: (err) => {
+        console.error('Error al iniciar sesión:', err);
+      }
+    });
   }
 
   volverInicio() {
-  this.router.navigate(['/']);
-}
+    this.router.navigate(['/']);
+  }
 }

@@ -8,7 +8,7 @@
 </button>
 
 <div fxLayout="column" fxLayoutAlign="center center" class="login-container">
-  <mat-card class="login-card">
+  <mat-card class="login-card" [ngClass]="mostrarRegistro ? 'registro-width' : 'login-width'">
     <mat-card-header fxLayoutAlign="center center" class="login-header" style="height: 15%;">
       <mat-card-title>
         <h2 class="text-center mb-1 login-title">
@@ -44,7 +44,7 @@
           >
             La contraseña es obligatorio
           </mat-error>
-          <button mat-icon-button matSuffix (click)="clickEvent($event)">
+          <button type="button" mat-icon-button matSuffix (click)="clickEvent($event)">
             <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
         </mat-form-field>
@@ -71,14 +71,12 @@
       class="btn-close float-end"
       (click)="alternarFormulario($event)"
     ></button>
-    <mat-card-content>
-      <form
-        (ngSubmit)="registrar()"
-        [formGroup]="registroForm"
-        fxLayout="column"
-        fxLayoutGap="3px"
-      >
-        <mat-form-field appearance="outline">
+   <mat-card-content>
+  <form (ngSubmit)="registrar()" [formGroup]="registroForm">
+    <div fxLayout="row wrap" fxLayoutGap="20px">
+      <!-- Columna 1 -->
+      <div fxFlex="45%">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nombre</mat-label>
           <input matInput formControlName="nombre" required />
           <mat-error *ngIf="registroForm.get('nombre')?.hasError('required')">
@@ -86,15 +84,15 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Apellido</mat-label>
           <input matInput formControlName="apellido" required />
           <mat-error *ngIf="registroForm.get('apellido')?.hasError('required')">
-            El Apellido es obligatorio
+            El apellido es obligatorio
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Sexo</mat-label>
           <mat-select formControlName="sexo" required>
             <mat-option value="Masculino">Masculino</mat-option>
@@ -103,51 +101,81 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Teléfono</mat-label>
-          <input matInput formControlName="telefono" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Correo electrónico</mat-label>
           <input matInput formControlName="email" required type="email" />
           <mat-error *ngIf="registroForm.get('email')?.hasError('required')">
             El correo es obligatorio
           </mat-error>
           <mat-error *ngIf="registroForm.get('email')?.hasError('email')">
-            El correo no es valido
+            El correo no es válido
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Contraseña</mat-label>
-          <input
-            matInput
-            [type]="hide() ? 'password' : 'text'"
-            formControlName="contrasenia"
-            required
-          />
+          <input matInput [type]="hide() ? 'password' : 'text'" formControlName="contrasenia" required />
+          <button type="button" mat-icon-button matSuffix (click)="clickEvent($event)">
+            <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
           <mat-error *ngIf="registroForm.get('contrasenia')?.hasError('required')">
             La contraseña es obligatoria
           </mat-error>
           <mat-error *ngIf="registroForm.get('contrasenia')?.hasError('minlength')">
-            La contraseña debe tener al menos 6 caracteres
+            Debe tener al menos 6 caracteres
           </mat-error>
-          <button mat-icon-button matSuffix (click)="clickEvent($event)">
-            <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
+        </mat-form-field>
+      </div>
+
+      <!-- Columna 2 -->
+      <div fxFlex="45%">
+        
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="registroForm.get('fechaNacimiento')?.hasError('required')">
+            La fecha es obligatoria
+          </mat-error>
         </mat-form-field>
 
-        <button
-          type="submit"
-          mat-raised-button
-          color="primary"
-          class="login-button full-width"
-        >
-          Registrarse
-        </button>
-      </form>
-    </mat-card-content>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Talla</mat-label>
+          <input matInput formControlName="talla" required />
+          <mat-error *ngIf="registroForm.get('talla')?.hasError('required')">
+            La talla es obligatoria
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Grupo Sanguíneo</mat-label>
+          <input matInput formControlName="grupoSanguineo" required />
+          <mat-error *ngIf="registroForm.get('grupoSanguineo')?.hasError('required')">
+            Obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dirección</mat-label>
+          <input matInput formControlName="direccion" />
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <button type="submit" mat-raised-button color="primary" class="login-button full-width">
+        Registrarse
+      </button>
+    </div>
+  </form>
+</mat-card-content>
     }
   </mat-card>
 </div>

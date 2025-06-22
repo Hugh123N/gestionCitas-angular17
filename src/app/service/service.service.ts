@@ -13,10 +13,10 @@ export class ServiceService {
 
   // ======================== USUARIO ========================
   // Registrar usuario
-  registerUser(usuario: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuario/save`, usuario);
+  registrarPaciente(usuario: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/pacientes/registrar`, usuario);
   }
-  
+
   // ======================== ESPECIALIDADES ========================
   // Obtener todas las especialidades
   getEspecialidades(): Observable<any> {

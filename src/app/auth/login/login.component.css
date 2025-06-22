@@ -52,6 +52,17 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.18);
   z-index: 1;
+   transition: width 0.3s ease;
+}
+
+/* Tamaño login */
+.login-width {
+  width: 380px;
+}
+
+/* Tamaño registro */
+.registro-width {
+  width: 900px;
 }
 
 /* Título centrado elegante */
