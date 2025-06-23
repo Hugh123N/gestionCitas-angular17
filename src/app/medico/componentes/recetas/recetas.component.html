@@ -51,17 +51,73 @@
 </div>
 
 <!-- Vista de receta -->
+<!-- Vista de receta -->
 <div class="panel-receta" *ngIf="mostrarVistaReceta">
     <h3>Receta de {{ recetaSeleccionada?.cita?.nombre }}</h3>
     <p><strong>Fecha:</strong> {{ recetaSeleccionada?.fecha }}</p>
     <p><strong>Firma del Médico:</strong> {{ recetaSeleccionada?.firma_medico }}</p>
     <p><strong>Instrucciones:</strong> {{ recetaSeleccionada?.instrucciones_adicionales }}</p>
 
+    <!-- Mostrar medicamentos si existen -->
+    <div *ngIf="medicamentosDeReceta.length > 0" class="medicamentos-lista">
+        <h4>Medicamentos:</h4>
+        <ul>
+            <li *ngFor="let med of medicamentosDeReceta">
+                <strong>{{ med.nombre_medicamento }}</strong> - {{ med.dosis }}, {{ med.frecuencia }}, {{ med.duracion
+                }}
+                <br />
+                <em>{{ med.observaciones }}</em>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Formulario de medicamento -->
+    <div class="panel-formulario" *ngIf="mostrarFormularioMedicamento">
+        <h4>Añadir Medicamento</h4>
+        <div class="form-group">
+            <label>Nombre del Medicamento:</label>
+            <input type="text" [(ngModel)]="nuevoMedicamento.nombre_medicamento" />
+        </div>
+        <div class="form-group">
+            <label>Dosis:</label>
+            <input type="text" [(ngModel)]="nuevoMedicamento.dosis" />
+        </div>
+        <div class="form-group">
+            <label>Frecuencia:</label>
+            <input type="text" [(ngModel)]="nuevoMedicamento.frecuencia" />
+        </div>
+        <div class="form-group">
+            <label>Duración:</label>
+            <input type="text" [(ngModel)]="nuevoMedicamento.duracion" />
+        </div>
+        <div class="form-group">
+            <label>Observaciones:</label>
+            <textarea [(ngModel)]="nuevoMedicamento.observaciones"></textarea>
+        </div>
+
+        <div class="botones">
+            <button class="btn-cancelar" (click)="cancelarFormularioMedicamento()">Cancelar</button>
+            <button class="btn-confirmar" (click)="confirmarAgregarMedicamento()">Guardar</button>
+        </div>
+    </div>
+
+    <!-- Confirmación para guardar medicamento -->
+    <div class="panel-formulario" *ngIf="mostrarConfirmacionMedicamento">
+        <p>¿Deseas guardar este medicamento?</p>
+        <div class="botones">
+            <button class="btn-confirmar" (click)="guardarMedicamento()">Confirmar</button>
+            <button class="btn-cancelar" (click)="cancelarFormularioMedicamento()">Cancelar</button>
+        </div>
+    </div>
+
     <div class="botones">
         <button class="btn-cancelar" (click)="cerrarVistaReceta()">Volver</button>
         <button class="btn-eliminar" (click)="abrirConfirmacionEliminar()">Eliminar Receta</button>
+        <button class="btn-confirmar" (click)="abrirFormularioMedicamento()" *ngIf="recetaSeleccionada">Añadir
+            Medicamento</button>
     </div>
 </div>
+
 
 <!-- Confirmación eliminar receta -->
 <div class="panel-formulario" *ngIf="mostrarConfirmacionEliminar">

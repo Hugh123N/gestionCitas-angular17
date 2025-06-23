@@ -61,7 +61,7 @@ export class AppComponent {
   }
 
   logout() {
-      Swal.fire({
+    Swal.fire({
       title: '¿Cerrar sesión?',
       text: '¿Estás seguro de que deseas salir?',
       icon: 'warning',
