@@ -34,7 +34,9 @@ export class HomeComponent {
 
   role: string | null = null;
   userName = '';
+  userId: number | null = null;
 
+  citas: any[] = [];
   displayedColumns: string[] = ['medico', 'fecha', 'hora', 'estado', 'accion'];
 
   constructor(private service: ServiceService, private citaService: CitaService, private router: Router, private route: ActivatedRoute, private authService: AuthService) {
@@ -44,25 +46,37 @@ export class HomeComponent {
     this.authService.currentUser$.subscribe(user => {
       this.role = user.role;
       this.userName = user.userName;
+      this.userId = user.idUsuario;
+
+      if (this.role === 'Paciente' && this.userId) {
+        this.cargarCitas(this.userId);
+      }
     });
+
+
   }
 
-  citas = [
-    {
-      id: 1,
-      medico: 'Dra. Ana López',
-      fecha: new Date('2025-06-05'),
-      hora: '10:30',
-      estado: 'Confirmada'
-    },
-    {
-      id: 2,
-      medico: 'Dr. Jorge Ruiz',
-      fecha: new Date('2025-06-10'),
-      hora: '15:00',
-      estado: 'Pendiente'
-    }
-  ];
+  cargarCitas(id: number) {
+    this.service.getCitasPorPaciente(id).subscribe({
+      next: (res: any) => {
+        if (Array.isArray(res)) {
+          this.citas = res.map((c: any) => ({
+            id: c.idCitas,
+            medico: `Dr(a). ${c.medico.nombre} ${c.medico.apellido}`,
+            fecha: c.fecha,
+            hora: c.hora,
+            estado: c.estado
+          }));
+        } else {
+          this.citas = [];
+          console.warn('Mensaje del backend:', res.message);
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener citas:', err);
+      }
+    });
+  }
 
   estadoClass(estado: string): string {
     switch (estado.toLowerCase()) {

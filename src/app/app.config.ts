@@ -2,7 +2,7 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatCalendar } from '@angular/material/datepicker';
@@ -15,10 +15,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { authInterceptor } from './core/guards/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
-  provideHttpClient(),
+  provideHttpClient(
+    withInterceptors([
+      authInterceptor
+    ])
+  ),
   provideAnimationsAsync(),
     MatCalendar,
     DatePipe, provideAnimationsAsync(),

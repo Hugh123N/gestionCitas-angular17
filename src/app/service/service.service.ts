@@ -7,52 +7,36 @@ import { Observable } from 'rxjs';
 })
 export class ServiceService {
 
-  private apiUrl = 'http://localhost:8080'; // URL base de la API
+  private apiUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
-  // ======================== USUARIO ========================
-  // Registrar usuario
+  // ======================== PACIENTES ========================
+
   registrarPaciente(usuario: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/pacientes/registrar`, usuario);
   }
 
-  // ======================== ESPECIALIDADES ========================
-  // Obtener todas las especialidades
-  getEspecialidades(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/especialidades/all`);
+  getCitasPorPaciente(idPaciente: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/api/pacientes/cita/${idPaciente}`);
   }
 
-  // ======================== MÉDICOS ========================
-  // Obtener médicos por especialidad
-  getMedicosByEspecialidad(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/medicos/especialidad/${id}`);
-  }
-
-  // ======================== PACIENTES ========================
-  // Obtener todos los pacientes
-  getAllPacientes(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/paciente/all`);
-  }
-
-  // Obtener paciente por ID
-  getPacienteById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/paciente/${id}`);
-  }
-
-  // ======================== CITAS MÉDICAS ========================
-  // Agendar una cita
   agendarCita(cita: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/citas/agendar`, cita);
   }
 
-  // Obtener citas por paciente
-  getCitasPorPaciente(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/citas/paciente/${id}`);
+  getMedicos(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/medicos`);
   }
 
-  // Cancelar una cita
   cancelarCita(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/citas/cancelar/${id}`, {});
   }
+
+
+   // ======================== MÉDICOS ========================
+
+  
+
+
 }

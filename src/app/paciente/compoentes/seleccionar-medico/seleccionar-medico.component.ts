@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ServiceService } from '../../../service/service.service';
 
 
 @Component({
@@ -31,16 +32,28 @@ export class SeleccionarMedicoComponent implements OnInit{
   medicos: any[] = [];
   cargando = true;
 
+  constructor(private service: ServiceService){}
+
   ngOnInit() {
     this.cargando = true;
-    // Simulación de llamada API
-    setTimeout(() => {
-      this.medicos = [
-        { id: 10, nombre: 'Dr. Juan Pérez', especialidad: 'Dermatologo' },
-        { id: 11, nombre: 'Dra. Laura Gómez', especialidad: 'Odontologo' }
-      ];
-      this.cargando = false;
-    }, 1000);
+    
+    this.service.getMedicos().subscribe({
+      next: (res: any) => {
+        setTimeout(() => {
+          this.medicos = res.medicos.map((c:any) => ({
+            id: c.idUsuario,
+            nombre: 'Dr(a). ' + c.nombre,
+            apellido: c.apellido,
+            especialidad: c.especialidad
+          }));
+          this.cargando = false;
+        }, 1000);
+      },
+      error: (err) => {
+        console.error('Error al obtener medicos:', err);
+      }
+    });
+
   }
 
   onChange(medicoId: number) {

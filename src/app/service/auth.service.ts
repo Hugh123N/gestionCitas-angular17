@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 
 interface UserData {
+  idUsuario: number,
   userName: string;
   role: UserRole;
   isLoggedIn: boolean;
@@ -25,6 +26,7 @@ export class AuthService {
   // BehaviorSubject para mantener el estado de autenticación del usuario
   private currentUserSubject: BehaviorSubject<UserData> =
     new BehaviorSubject<UserData>({
+      idUsuario: 0,
       userName: "",
       role: UserRole.PACIENTE,
       isLoggedIn: false,
@@ -49,6 +51,7 @@ export class AuthService {
         }
           
           const userData: UserData = {
+            idUsuario: response.usuario.idUsuario,
             userName: response.usuario.nombre + ' ' + response.usuario.apellido,
             role: response.usuario.rol as UserRole,
             isLoggedIn: true,
@@ -74,6 +77,7 @@ export class AuthService {
 
   logout(): void {
     this.currentUserSubject.next({
+      idUsuario:0,
       userName: '',
       role: UserRole.PACIENTE, // Valor por defecto, o null si prefieres
       isLoggedIn: false,
