@@ -29,8 +29,12 @@ export class ServiceService {
     return this.http.get(`${this.apiUrl}/api/medicos`);
   }
 
-  cancelarCita(id: number): Observable<any> {
+  disponibilidad(id: number, ): Observable<any> {
     return this.http.put(`${this.apiUrl}/citas/cancelar/${id}`, {});
+  }
+
+  getCitaById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/cita/id/${id}`);
   }
 
 

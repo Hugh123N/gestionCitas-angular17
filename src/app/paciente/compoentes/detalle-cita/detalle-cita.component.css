@@ -1,0 +1,82 @@
+
+.detalle-container {
+  padding: 20px;
+  max-width: 950px;
+  margin: auto;
+}
+
+.header-card {
+  padding: 16px 24px;
+  border-left: 5px solid #1976d2;
+}
+
+.header-text h2 {
+  margin: 0;
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.fecha-hora {
+  font-size: 14px;
+  color: #555;
+}
+
+.estado-chip {
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+  &.pendiente {
+    background-color: #fb8c00;
+  }
+  &.confirmada {
+    background-color: #4caf50;
+  }
+  &.cancelada {
+    background-color: #f44336;
+  }
+}
+
+.titulo-seccion {
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.info-card {
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.receta-card {
+  border-left: 4px solid #4caf50;
+}
+
+mat-icon{
+  margin-right: 10px;
+}
+
+/*btn volver*/
+
+.volver-container {
+  margin-bottom: 10px;
+
+  button {
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: none;
+  }
+
+  mat-icon {
+    margin-right: 4px;
+  }
+}
+
+
+/*error message*/
+
+.error-msg {
+  text-align: center;
+  color: #f44336;
+  font-weight: bold;
+  margin-top: 40px;
+}

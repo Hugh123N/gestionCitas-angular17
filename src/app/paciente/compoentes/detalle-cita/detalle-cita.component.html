@@ -1,0 +1,87 @@
+
+
+<div fxLayout="column" fxLayoutGap="20px" class="detalle-container">
+
+  <!-- Botón volver -->
+  <div fxLayout="row" fxLayoutAlign="start center" class="volver-container">
+    <button mat-stroked-button color="primary" (click)="volverInicio()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver
+    </button>
+  </div>
+  <ng-container *ngIf="loading">
+    <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 50px;">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="error">
+    <div class="error-msg">
+      <mat-icon color="warn">error</mat-icon>
+      Error al cargar la cita. Intente más tarde.
+    </div>
+  </ng-container>
+  
+  <ng-container *ngIf="!loading && !error">
+    <!-- Header resumen con estado -->
+    <mat-card class="header-card">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="header-text">
+          <h2>Cita Médica #{{ cita.idCitas }}</h2>
+          <span class="fecha-hora">
+            {{ cita.fecha | date:'fullDate' }} - {{ cita.hora }}
+          </span>
+        </div>
+        <mat-chip class="estado-chip" [ngClass]="cita.estado.toLowerCase()">
+          {{ cita.estado }}
+        </mat-chip>
+      </div>
+    </mat-card>
+
+    <!-- Médico y paciente -->
+    <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column">
+      <mat-card class="info-card" fxFlex>
+        <mat-card-title class="titulo-seccion">Médico</mat-card-title>
+        <mat-card-content>
+          <p><mat-icon>person</mat-icon> <strong>Dr. {{ cita.medico.nombre }} {{ cita.medico.apellido }}</strong></p>
+          <p><mat-icon>medical_services</mat-icon> <strong>{{ cita.medico.especialidad }}</strong></p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="info-card" fxFlex>
+        <mat-card-title class="titulo-seccion">Paciente</mat-card-title>
+        <mat-card-content>
+          <p><mat-icon>person</mat-icon> <strong>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</strong></p>
+          <p><mat-icon>bloodtype</mat-icon> <strong>Grupo sanguíneo:</strong> {{ cita.paciente.grupoSanguineo }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Diagnóstico, notas y tratamiento -->
+    <mat-card class="info-card">
+      <mat-card-title class="titulo-seccion">Información médica</mat-card-title>
+      <mat-card-content fxLayout="column" fxLayoutGap="10px">
+        <p><mat-icon>healing</mat-icon> <strong>Diagnóstico:</strong> {{ cita.diagnostico }}</p>
+        <p><mat-icon>description</mat-icon> <strong>Notas:</strong> {{ cita.notasMedicas }}</p>
+        <p><mat-icon>medication</mat-icon> <strong>Tratamiento:</strong> {{ cita.tratamiento }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Receta médica -->
+    <mat-card class="info-card receta-card" *ngIf="cita.recetaDTO">
+      <mat-card-title class="titulo-seccion">Receta Médica</mat-card-title>
+      <mat-card-content fxLayout="column" fxLayoutGap="10px">
+        <p><mat-icon>calendar_month</mat-icon> <strong>Fecha:</strong> {{ cita.recetaDTO.fecha | date }}</p>
+        <p><mat-icon>note</mat-icon> <strong>Instrucciones:</strong> {{ cita.recetaDTO.instruccionesAdicionales }}</p>
+        <p><mat-icon>signature</mat-icon> <strong>Firma del Médico:</strong> {{ cita.recetaDTO.firmaMedico }}</p>
+
+        <h4><mat-icon>vaccines</mat-icon> Medicamentos:</h4>
+        <div fxLayout="row wrap" fxLayoutGap="10px">
+          <mat-chip *ngFor="let med of cita.recetaDTO.medicamentos" color="primary" selected>
+            {{ med.medicamento }}
+          </mat-chip>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>
