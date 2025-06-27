@@ -1,0 +1,27 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Angular cache
+.angular
+.cache
+dist
+
+# Git
+.git
+.gitignore
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Docker
+# Dockerfile
+# docker-compose.yml
+
+# Tests y configs
+karma.conf.js
+tsconfig.spec.json
+jest.config.js
+coverage

@@ -1,0 +1,10 @@
+services:
+  gestioncitas-web:
+    build: .
+    ports:
+      - "4200:80"
+    container_name: gestioncitas-web
+    volumes:
+      - ./html:/usr/share/nginx/html
+volumes: 
+  html: {}

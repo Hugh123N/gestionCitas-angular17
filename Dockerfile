@@ -3,7 +3,8 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm run build --configuration production
+RUN npx ng build --configuration production
+#npm run build
 
 # Fase 2: Servir con Nginx
 FROM nginx:alpine
