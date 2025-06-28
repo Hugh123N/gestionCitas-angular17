@@ -1,11 +1,24 @@
+import { RecetaDTO } from "./RecetaDTO";
+
 export interface CitaDTO {
-    id: number;
-    tratamiento: string;
+    idCitas: number;
+    paciente: {
+        idUsuario: number;
+        nombre: string;
+        apellido: string;
+        grupoSanguineo: string;
+    };
+    medico: {
+        idUsuario: number;
+        nombre: string;
+        apellido: string;
+        especialidad: string;
+    };
     fecha: string;
-    horario: string;
-    duracion: number;
-    nombre: string;       // nombre del paciente
-    medico: string;       // nombre del médico
-    estado: string;       // 'Finalizada', 'Pendiente', etc.
-    notas: string;        // notas médicas
+    hora: string;
+    tratamiento: string;
+    notasMedicas: string;
+    diagnostico: string;
+    estado: string;
+    recetaDTO?: RecetaDTO;
 }

@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CitaDTO } from '../../../interfaces/CitaDTO';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatCardModule, MatTableModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './calendario.component.html',
   styleUrls: ['./calendario.component.css']
 })
@@ -26,18 +23,31 @@ export class CalendarioComponent implements OnInit {
   meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
   mostrarSelector = false;
 
-  citas: CitaDTO[] = [];
-  citasDelDia: CitaDTO[] = [];
+  citas: any[] = [];
+  citasDelDia: any[] = [];
   diaSeleccionado: number | null = null;
   diaSeleccionadoConCitas = false;
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit() { this.loadCitas(); }
+  ngOnInit(): void {
+    let idGuardado = localStorage.getItem('userId');
+    if (!idGuardado) {
+      console.warn('ID no encontrado en localStorage. Usando ID de prueba 6.');
+      localStorage.setItem('userId', '6');
+      idGuardado = '6';
+    }
 
-  loadCitas() {
-    this.http.get<{ citas: CitaDTO[] }>('http://localhost:8089/api/citas')
-      .subscribe(res => { this.citas = res.citas; this.recargarCalendario(); });
+    const medicoId = Number(idGuardado);
+    this.http.get<any[]>(`http://localhost:8080/api/medicos/cita/${medicoId}`).subscribe({
+      next: (data) => {
+        this.citas = data;
+        this.recargarCalendario();
+      },
+      error: (err) => {
+        console.error('Error al cargar citas:', err);
+      }
+    });
   }
 
   recargarCalendario() {
@@ -48,8 +58,15 @@ export class CalendarioComponent implements OnInit {
   generarCalendario() {
     const primerDia = new Date(this.anioSeleccionado, this.mesSeleccionado, 1).getDay();
     const totalDias = new Date(this.anioSeleccionado, this.mesSeleccionado + 1, 0).getDate();
-    this.diasEnCalendario = Array(primerDia).fill(0)
-      .concat([...Array(totalDias)].map((_, i) => i + 1));
+    this.diasEnCalendario = Array(primerDia).fill(0).concat(
+      Array.from({ length: totalDias }, (_, i) => i + 1)
+    );
+  }
+
+  formatearFecha(dia: number): string {
+    const d = dia < 10 ? `0${dia}` : `${dia}`;
+    const m = this.mesSeleccionado + 1 < 10 ? `0${this.mesSeleccionado + 1}` : `${this.mesSeleccionado + 1}`;
+    return `${this.anioSeleccionado}-${m}-${d}`;
   }
 
   tieneCitas(dia: number): boolean {
@@ -67,27 +84,31 @@ export class CalendarioComponent implements OnInit {
   }
 
   clearSeleccion() {
-    this.diaSeleccionadoConCitas = false;
     this.diaSeleccionado = null;
-  }
-
-  formatearFecha(dia: number): string {
-    const d = dia < 10 ? `0${dia}` : `${dia}`;
-    const m = this.mesSeleccionado + 1 < 10 ? `0${this.mesSeleccionado + 1}` : `${this.mesSeleccionado + 1}`;
-    return `${this.anioSeleccionado}-${m}-${d}`;
+    this.diaSeleccionadoConCitas = false;
   }
 
   mesAnterior() {
-    if (this.mesSeleccionado === 0) { this.mesSeleccionado = 11; this.anioSeleccionado--; }
-    else this.mesSeleccionado--;
+    if (this.mesSeleccionado === 0) {
+      this.mesSeleccionado = 11;
+      this.anioSeleccionado--;
+    } else {
+      this.mesSeleccionado--;
+    }
     this.recargarCalendario();
   }
 
   mesSiguiente() {
-    if (this.mesSeleccionado === 11) { this.mesSeleccionado = 0; this.anioSeleccionado++; }
-    else this.mesSeleccionado++;
+    if (this.mesSeleccionado === 11) {
+      this.mesSeleccionado = 0;
+      this.anioSeleccionado++;
+    } else {
+      this.mesSeleccionado++;
+    }
     this.recargarCalendario();
   }
 
-  obtenerNombreMes(m: number) { return this.meses[m]; }
+  obtenerNombreMes(m: number) {
+    return this.meses[m];
+  }
 }

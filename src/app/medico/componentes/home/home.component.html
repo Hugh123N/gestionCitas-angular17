@@ -10,17 +10,17 @@
         </button>
         <div class="tarjeta" *ngFor="let cita of citasFiltradas" (click)="verDetalle(cita)">
             <h3 class="tarjeta-titulo">{{ cita.tratamiento }}</h3>
-            <p class="paciente">Paciente: {{ cita.nombre }}</p>
+            <p class="paciente">Paciente: {{ cita.paciente.nombre }}</p>
             <div class="fila">
                 <span>{{ cita.fecha }}</span>
-                <span>{{ cita.horario }}</span>
+                <span>{{ cita.hora }}</span>
             </div>
         </div>
     </div>
 
     <!-- Detalle de cita -->
     <div class="panel-detalle" *ngIf="citaSeleccionada && !mostrarConfirmacion && !modoConfirmarCancelacion">
-        <h2 class="titulo-detalle">Detalles de Cita {{ citaSeleccionada.id }}</h2>
+        <h2 class="titulo-detalle">Detalles de Cita {{ citaSeleccionada.idCitas }}</h2>
         <button class="btn-regresar" (click)="regresar()">Regresar a la lista</button>
 
         <div class="grid-datos">
@@ -45,7 +45,7 @@
             <!-- Hora -->
             <div>
                 <strong>Hora:</strong><br>
-                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.horario }}</ng-container>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.hora }}</ng-container>
                 <ng-container *ngIf="modoEdicion">
                     <input type="time" [(ngModel)]="horaEditada" />
                 </ng-container>
@@ -54,7 +54,7 @@
             <!-- Duración -->
             <div>
                 <strong>Duración (min):</strong><br>
-                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.duracion }}</ng-container>
+                <ng-container *ngIf="!modoEdicion">1</ng-container>
                 <ng-container *ngIf="modoEdicion">
                     <input type="number" [(ngModel)]="duracionEditada" />
                 </ng-container>
@@ -72,7 +72,7 @@
             <!-- Paciente -->
             <div>
                 <strong>Paciente:</strong><br>
-                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.nombre }}</ng-container>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.paciente.nombre }}</ng-container>
                 <ng-container *ngIf="modoEdicion">
                     <input [(ngModel)]="pacienteEditado" />
                 </ng-container>
@@ -96,7 +96,7 @@
             <!-- Notas -->
             <div class="nota">
                 <strong>Notas:</strong><br>
-                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.notas }}</ng-container>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.notasMedicas }}</ng-container>
                 <ng-container *ngIf="modoEdicion">
                     <textarea [(ngModel)]="notasEditadas" rows="3"></textarea>
                 </ng-container>

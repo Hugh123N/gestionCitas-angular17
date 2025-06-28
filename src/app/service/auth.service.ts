@@ -19,7 +19,7 @@ interface UserData {
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8081'; 
+  private apiUrl = 'http://localhost:8080';
   private http = inject(HttpClient);
   private router = inject(Router);
 
@@ -45,11 +45,11 @@ export class AuthService {
       .post<any>(`${this.apiUrl}/login`, { email, contrasenia })
       .pipe(
         tap((response) => {
-          console.log('LOGIN RESPONSE:', response); 
+          console.log('LOGIN RESPONSE:', response);
           if (!response.usuario || !response.token) {
-          throw new Error('Respuesta inválida del servidor');
-        }
-          
+            throw new Error('Respuesta inválida del servidor');
+          }
+
           const userData: UserData = {
             idUsuario: response.usuario.idUsuario,
             userName: response.usuario.nombre + ' ' + response.usuario.apellido,
@@ -58,26 +58,26 @@ export class AuthService {
             token: response.token,
           };
           var ruta;
-          if(userData.role === 'Paciente'){
+          if (userData.role === 'Paciente') {
             ruta = 'paciente'
-          }else if(userData.role === 'Medico')
+          } else if (userData.role === 'Medico')
             ruta = 'medico'
 
-        this.currentUserSubject.next(userData);
-        this.saveUserToLocalStorage(userData);
-        this.router.navigate([`/${ruta}`]);
+          this.currentUserSubject.next(userData);
+          this.saveUserToLocalStorage(userData);
+          this.router.navigate([`/${ruta}`]);
 
-      }),
-      catchError((error) => {
-        console.error('Error en login:', error);
-        return throwError(() => error);
-      })
-    );
+        }),
+        catchError((error) => {
+          console.error('Error en login:', error);
+          return throwError(() => error);
+        })
+      );
   }
 
   logout(): void {
     this.currentUserSubject.next({
-      idUsuario:0,
+      idUsuario: 0,
       userName: '',
       role: UserRole.PACIENTE, // Valor por defecto, o null si prefieres
       isLoggedIn: false,

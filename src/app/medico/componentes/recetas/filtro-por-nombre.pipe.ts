@@ -9,6 +9,6 @@ export class FiltroPorNombrePipe implements PipeTransform {
     transform(citas: CitaDTO[], nombre: string): CitaDTO[] {
         if (!nombre) return citas;
         const filtro = nombre.toLowerCase();
-        return citas.filter(c => c.nombre.toLowerCase().includes(filtro));
+        return citas.filter(c => c.paciente.nombre.toLowerCase().includes(filtro));
     }
 }

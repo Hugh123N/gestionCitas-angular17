@@ -1,17 +1,16 @@
+import { MedicamentoDTO } from "./MedicamentoDTO";
+
 export interface RecetaDTO {
-    id_receta: number;
-    cita: {
-        id: number;
-        tratamiento: string;
-        fecha: string;
-        horario: string;
-        duracion: number;
-        nombre: string;
-        medico: string;
-        estado: string;
-        notas: string;
-    };
-    instrucciones_adicionales: string;
-    firma_medico: string;
+    idReceta: number;
     fecha: string;
+    nombrePaciente: string;
+    grupoSanguineoPaciente: string;
+    nombreMedico: string;
+    especialidadMedico: string;
+    diagnostico: string;
+    tratamiento: string;
+    instrucciones: string;
+    firmaMedico: string;
+    medicamentos: string[]; // puede venir como array de strings
 }
+

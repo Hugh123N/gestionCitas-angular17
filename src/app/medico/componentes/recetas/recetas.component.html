@@ -1,129 +1,98 @@
-<p>recetas works!</p>
-<!-- recetas.component.html corregido -->
+<!-- Buscador y listado -->
 <div class="panel-citas" *ngIf="!mostrarFormulario && !mostrarVistaReceta">
     <input type="text" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre de paciente" class="input-busqueda" />
     <h2>Listado de Citas</h2>
     <div *ngFor="let cita of citas | filtroPorNombre:filtroNombre" class="card-cita">
-        <p><strong>Paciente:</strong> {{ cita.nombre }}</p>
-        <p><strong>Fecha:</strong> {{ cita.fecha }} - {{ cita.horario }}</p>
+        <p><strong>Paciente:</strong> {{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</p>
+        <p><strong>Fecha:</strong> {{ cita.fecha }} - {{ cita.hora }}</p>
         <p><strong>Tratamiento:</strong> {{ cita.tratamiento }}</p>
         <div class="acciones">
-            <button *ngIf="!tieneReceta(cita.id)" (click)="abrirFormulario(cita)">Añadir Receta</button>
-            <button *ngIf="tieneReceta(cita.id)" (click)="verReceta(cita.id)">Ver Receta</button>
+            <button *ngIf="!cita.recetaDTO" (click)="abrirFormulario(cita)">Añadir Receta</button>
+            <button *ngIf="cita.recetaDTO" (click)="verReceta(cita)">Ver Receta</button>
         </div>
     </div>
 </div>
 
-<!-- Formulario para crear receta -->
-<div class="panel-formulario" *ngIf="mostrarFormulario">
-    <h3>Crear Receta para {{ citaSeleccionada?.nombre }}</h3>
+<!-- Formulario Crear Receta -->
+<div *ngIf="mostrarFormulario" class="panel-formulario">
+    <h3>Crear Receta para {{ citaSeleccionada?.paciente?.nombre }} {{ citaSeleccionada?.paciente?.apellido }}</h3>
     <form>
-        <div class="form-group">
-            <label>Fecha:</label>
-            <input type="text" [(ngModel)]="fechaReceta" name="fecha" placeholder="YYYY-MM-DD">
-        </div>
+        <label>Fecha:</label>
+        <input type="text" [(ngModel)]="fechaReceta" name="fecha" placeholder="YYYY-MM-DD" />
 
-        <div class="form-group">
-            <label>Firma del Médico:</label>
-            <input type="text" [(ngModel)]="firmaMedico" name="firmaMedico">
-        </div>
+        <label>Firma del Médico:</label>
+        <input type="text" [(ngModel)]="firmaMedico" name="firmaMedico" />
 
-        <div class="form-group">
-            <label>Instrucciones Adicionales:</label>
-            <textarea [(ngModel)]="instruccionesAdicionales" name="instrucciones"></textarea>
-        </div>
+        <label>Instrucciones Adicionales:</label>
+        <textarea [(ngModel)]="instruccionesAdicionales" name="instrucciones"></textarea>
 
         <div class="botones">
-            <button type="button" class="btn-cancelar" (click)="cancelarFormulario()">Cancelar</button>
-            <button type="button" class="btn-confirmar" (click)="confirmarFormulario()">Guardar</button>
+            <button type="button" (click)="cancelarFormulario()">Cancelar</button>
+            <button type="button" (click)="confirmarFormulario()">Guardar</button>
         </div>
     </form>
 </div>
 
-
-<!-- Confirmación para guardar receta -->
-<div class="panel-formulario" *ngIf="mostrarConfirmacion">
+<!-- Confirmación de Receta -->
+<div *ngIf="mostrarConfirmacion" class="panel-formulario">
     <p>¿Deseas confirmar el registro de la receta?</p>
     <div class="botones">
-        <button class="btn-confirmar" (click)="guardarReceta()">Confirmar</button>
-        <button class="btn-cancelar" (click)="cancelarFormulario()">Cancelar</button>
+        <button (click)="guardarReceta()">Confirmar</button>
+        <button (click)="cancelarFormulario()">Cancelar</button>
     </div>
 </div>
 
-<!-- Vista de receta -->
-<!-- Vista de receta -->
-<div class="panel-receta" *ngIf="mostrarVistaReceta">
-    <h3>Receta de {{ recetaSeleccionada?.cita?.nombre }}</h3>
+<!-- Vista Receta -->
+<div *ngIf="mostrarVistaReceta" class="panel-receta">
+    <h3>Receta de {{ recetaSeleccionada?.nombrePaciente }} {{ recetaSeleccionada?.grupoSanguineoPaciente }}</h3>
     <p><strong>Fecha:</strong> {{ recetaSeleccionada?.fecha }}</p>
-    <p><strong>Firma del Médico:</strong> {{ recetaSeleccionada?.firma_medico }}</p>
-    <p><strong>Instrucciones:</strong> {{ recetaSeleccionada?.instrucciones_adicionales }}</p>
+    <p><strong>Firma del Médico:</strong> {{ recetaSeleccionada?.firmaMedico }}</p>
+    <p><strong>Instrucciones:</strong> {{ recetaSeleccionada?.instrucciones }}</p>
 
-    <!-- Mostrar medicamentos si existen -->
-    <div *ngIf="medicamentosDeReceta.length > 0" class="medicamentos-lista">
+    <!-- Lista Medicamentos -->
+    <div *ngIf="medicamentosDeReceta.length > 0">
         <h4>Medicamentos:</h4>
         <ul>
             <li *ngFor="let med of medicamentosDeReceta">
-                <strong>{{ med.nombre_medicamento }}</strong> - {{ med.dosis }}, {{ med.frecuencia }}, {{ med.duracion
-                }}
-                <br />
-                <em>{{ med.observaciones }}</em>
+                <strong>{{ med.medicamento }}</strong> - {{ med.dosis }}, {{ med.frecuencia }}, {{ med.duracion }}
+                <br /><em>{{ med.observaciones }}</em>
+                <button (click)="eliminarMedicamento(med.idMedicamento!)">Eliminar</button>
             </li>
         </ul>
     </div>
 
-    <!-- Formulario de medicamento -->
-    <div class="panel-formulario" *ngIf="mostrarFormularioMedicamento">
+    <!-- Formulario Medicamento -->
+    <div *ngIf="mostrarFormularioMedicamento" class="panel-formulario">
         <h4>Añadir Medicamento</h4>
-        <div class="form-group">
-            <label>Nombre del Medicamento:</label>
-            <input type="text" [(ngModel)]="nuevoMedicamento.nombre_medicamento" />
-        </div>
-        <div class="form-group">
-            <label>Dosis:</label>
-            <input type="text" [(ngModel)]="nuevoMedicamento.dosis" />
-        </div>
-        <div class="form-group">
-            <label>Frecuencia:</label>
-            <input type="text" [(ngModel)]="nuevoMedicamento.frecuencia" />
-        </div>
-        <div class="form-group">
-            <label>Duración:</label>
-            <input type="text" [(ngModel)]="nuevoMedicamento.duracion" />
-        </div>
-        <div class="form-group">
-            <label>Observaciones:</label>
-            <textarea [(ngModel)]="nuevoMedicamento.observaciones"></textarea>
-        </div>
+        <input type="text" [(ngModel)]="nuevoMedicamento.medicamento" placeholder="Medicamento" />
+        <input type="text" [(ngModel)]="nuevoMedicamento.dosis" placeholder="Dosis" />
+        <input type="text" [(ngModel)]="nuevoMedicamento.frecuencia" placeholder="Frecuencia" />
+        <input type="text" [(ngModel)]="nuevoMedicamento.duracion" placeholder="Duración" />
+        <textarea [(ngModel)]="nuevoMedicamento.observaciones" placeholder="Observaciones"></textarea>
 
         <div class="botones">
-            <button class="btn-cancelar" (click)="cancelarFormularioMedicamento()">Cancelar</button>
-            <button class="btn-confirmar" (click)="confirmarAgregarMedicamento()">Guardar</button>
+            <button (click)="cancelarFormularioMedicamento()">Cancelar</button>
+            <button (click)="confirmarAgregarMedicamento()">Guardar</button>
         </div>
     </div>
 
-    <!-- Confirmación para guardar medicamento -->
-    <div class="panel-formulario" *ngIf="mostrarConfirmacionMedicamento">
+    <!-- Confirmación Medicamento -->
+    <div *ngIf="mostrarConfirmacionMedicamento" class="panel-formulario">
         <p>¿Deseas guardar este medicamento?</p>
-        <div class="botones">
-            <button class="btn-confirmar" (click)="guardarMedicamento()">Confirmar</button>
-            <button class="btn-cancelar" (click)="cancelarFormularioMedicamento()">Cancelar</button>
-        </div>
+        <button (click)="guardarMedicamento()">Confirmar</button>
+        <button (click)="cancelarFormularioMedicamento()">Cancelar</button>
     </div>
 
     <div class="botones">
-        <button class="btn-cancelar" (click)="cerrarVistaReceta()">Volver</button>
-        <button class="btn-eliminar" (click)="abrirConfirmacionEliminar()">Eliminar Receta</button>
-        <button class="btn-confirmar" (click)="abrirFormularioMedicamento()" *ngIf="recetaSeleccionada">Añadir
-            Medicamento</button>
+        <button (click)="cerrarVistaReceta()">Volver</button>
+        <button (click)="abrirConfirmacionEliminar()">Eliminar Receta</button>
+        <button *ngIf="recetaSeleccionada" (click)="abrirFormularioMedicamento()">Añadir Medicamento</button>
     </div>
 </div>
 
-
-<!-- Confirmación eliminar receta -->
-<div class="panel-formulario" *ngIf="mostrarConfirmacionEliminar">
+<!-- Confirmar eliminar receta -->
+<div *ngIf="mostrarConfirmacionEliminar" class="panel-formulario">
     <p>¿Estás seguro que deseas eliminar esta receta?</p>
-    <div class="botones">
-        <button class="btn-confirmar" (click)="confirmarEliminar()">Confirmar</button>
-        <button class="btn-cancelar" (click)="cancelarEliminar()">Cancelar</button>
-    </div>
+    <button (click)="confirmarEliminar()">Confirmar</button>
+    <button (click)="cancelarEliminar()">Cancelar</button>
 </div>

@@ -1,6 +1,5 @@
-<p>calendario works!</p>
 <div class="calendario-container">
-    <h2 class="titulo">Agenda de Ana García</h2>
+    <h2 class="titulo">Agenda del Médico</h2>
 
     <div class="barra-controles">
         <button (click)="mesAnterior()">Anterior</button>
@@ -27,14 +26,20 @@
         </div>
     </div>
 
-    <!-- Panel emergente mejorado -->
+    <!-- Panel emergente de citas -->
     <div *ngIf="diaSeleccionadoConCitas" class="panel-citas">
         <h3>Citas del {{ diaSeleccionado }} de {{ obtenerNombreMes(mesSeleccionado) }}</h3>
         <div *ngFor="let cita of citasDelDia" class="card-cita">
-            <strong>{{ cita.nombre }}</strong>
-            <p>{{ cita.horario }} · {{ cita.duracion }} min · <em>{{ cita.estado }}</em></p>
+            <strong>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</strong>
+            <p>{{ cita.hora }} · <em>{{ cita.estado }}</em></p>
             <p>{{ cita.tratamiento }}</p>
         </div>
         <button class="btn-cerrar" (click)="clearSeleccion()">Cerrar</button>
+    </div>
+
+    <!-- Aviso si no hay citas -->
+    <div *ngIf="citas.length === 0" style="margin-top: 20px;">
+        <p style="color: red;">No hay citas para mostrar. Asegúrate de estar autenticado o que existan citas asignadas.
+        </p>
     </div>
 </div>
