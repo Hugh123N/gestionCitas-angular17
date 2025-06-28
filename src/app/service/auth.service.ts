@@ -45,7 +45,6 @@ export class AuthService {
       .post<any>(`${this.apiUrl}/login`, { email, contrasenia })
       .pipe(
         tap((response) => {
-          console.log('LOGIN RESPONSE:', response);
           if (!response.usuario || !response.token) {
             throw new Error('Respuesta inválida del servidor');
           }

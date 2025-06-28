@@ -31,15 +31,10 @@ export class CalendarioComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    let idGuardado = localStorage.getItem('userId');
-    if (!idGuardado) {
-      console.warn('ID no encontrado en localStorage. Usando ID de prueba 6.');
-      localStorage.setItem('userId', '6');
-      idGuardado = '6';
-    }
+    const user = JSON.parse(localStorage.getItem('currentUser')!);
+    let idGuardado = user?.idUsuario;
 
-    const medicoId = Number(idGuardado);
-    this.http.get<any[]>(`http://localhost:8080/api/medicos/cita/${medicoId}`).subscribe({
+    this.http.get<any[]>(`http://localhost:8080/api/medicos/cita/${idGuardado}`).subscribe({
       next: (data) => {
         this.citas = data;
         this.recargarCalendario();

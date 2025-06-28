@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   pacienteEditado = '';
   estadoEditado = '';
   citaEnConfirmacion: CitaDTO | null = null;
+  idMedico: number = 0;
 
 
 
@@ -41,10 +42,13 @@ export class HomeComponent implements OnInit {
   }
 
   obtenerCitas(): void {
-    this.http.get<any>('http://localhost:8089/api/citas')
+    const user = JSON.parse(localStorage.getItem('currentUser')!);
+    this.idMedico = user.idUsuario;
+
+    this.http.get<any>(`http://localhost:8080/api/medicos/cita/${this.idMedico}`)
       .subscribe({
         next: (data) => {
-          this.citas = data.citas;
+          this.citas = data;
           this.citasFiltradas = [...this.citas];
 
         },
@@ -108,7 +112,7 @@ export class HomeComponent implements OnInit {
       notas: this.notasEditadas
     };
 
-    this.http.put<any>(`http://localhost:8089/api/citas/${cuerpo.idCitas}`, cuerpo)
+    this.http.put<any>(`http://localhost:8080/api/citas/${cuerpo.idCitas}`, cuerpo)
       .subscribe({
         next: (res) => {
           this.obtenerCitas();
@@ -134,13 +138,10 @@ export class HomeComponent implements OnInit {
   ejecutarCancelacion(): void {
     if (!this.citaEnConfirmacion) return;
 
-    this.http.put<any>(`http://localhost:8089/api/citas/eliminar/${this.citaEnConfirmacion.idCitas}`, {})
+    this.http.put<any>(`http://localhost:8080/api/cita/actualizarEstado/${this.citaEnConfirmacion.idCitas}`, {})
       .subscribe({
         next: () => {
           this.obtenerCitas();
-          if (this.citaSeleccionada) {
-            this.citaSeleccionada.estado = 'Finalizada';
-          }
           this.resetearEstados();
         },
         error: (err) => {
