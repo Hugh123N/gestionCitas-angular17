@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ServiceService {
 
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = 'http://localhost:8081';
 
   constructor(private http: HttpClient) { }
 
@@ -21,8 +21,8 @@ export class ServiceService {
     return this.http.get<any[]>(`${this.apiUrl}/api/pacientes/cita/${idPaciente}`);
   }
 
-  agendarCita(cita: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/citas/agendar`, cita);
+  registrarCita(cita: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/cita/registrar`, cita);
   }
 
   getMedicos(): Observable<any> {
@@ -38,7 +38,7 @@ export class ServiceService {
   }
 
   getHorariosDisponibles(idMedico: number, fecha: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/disponibilidad/${idMedico}?fecha=${fecha}`);
+    return this.http.get(`${this.apiUrl}/api/medicos/${idMedico}?fecha=${fecha}`);
   }
 
   // ======================== MÉDICOS ========================

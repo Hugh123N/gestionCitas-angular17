@@ -40,9 +40,11 @@ export class AgendaCitaComponent {
 
   medico: any;
   resumenCita: any;
+  cita: any;
+  idPaciente: number = 0;
 
 
-  constructor(private router: Router, private route: ActivatedRoute, private service: ServiceService, private citaService: CitaService, private fb: FormBuilder) {
+  constructor(private router: Router, private route: ActivatedRoute, private service: ServiceService, private fb: FormBuilder) {
 
   }
 
@@ -59,17 +61,40 @@ export class AgendaCitaComponent {
   }
 
   onConfirmar() {
-    // Enviar a backend la cita completa
-    // Mostrar snack o redirigir
-    // Redirigir o mostrar mensaje de éxito
-    Swal.fire({
-      icon: 'success',
-      title: '¡Cita confirmada!',
-      text: 'Tu cita ha sido registrada exitosamente.',
-      confirmButtonText: 'Ir al panel',
-      confirmButtonColor: '#3085d6'
-    }).then(() => {
-      this.router.navigate(['/paciente']);
+    const user = JSON.parse(localStorage.getItem('currentUser')!);
+
+    const fechaCompleta = new Date(this.resumenCita.fecha); 
+    const fecha = fechaCompleta.toISOString().split('T')[0]; 
+
+    this.cita = {
+      idMedico: this.resumenCita.medico.id,
+      idPaciente: user.idUsuario,
+      fecha: fecha,
+      hora: this.resumenCita.hora
+    }
+    this.service.registrarCita(this.cita).subscribe({
+      next: (data) => {
+        Swal.fire({
+        icon: data.status,
+        title: '¡Cita confirmada!',
+        text: 'Tu cita ha sido registrada exitosamente.',
+        confirmButtonText: 'Ir al panel',
+        confirmButtonColor: '#3085d6'
+        }).then(() => {
+          this.router.navigate(['/paciente']);
+        });
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: '¡Registro incorrecto!',
+          text: err?.error?.message || 'Ocurrió un error',
+          confirmButtonText: 'Intentelo otra vez',
+          confirmButtonColor: '#3085d6'
+        }).then(() => {
+          this.router.navigate(['/paciente/agenda-cita']);
+        });
+      },
     });
   }
 

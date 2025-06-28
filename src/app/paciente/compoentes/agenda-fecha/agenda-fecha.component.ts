@@ -39,7 +39,10 @@ export class AgendaFechaComponent implements OnInit {
   hoy: Date = new Date();
   fechaSeleccionada: Date | null = null;
   horarios: string[] = [];
+  horariosOcupados: string[] = [];
   cargando = false;
+
+  constructor(private service: ServiceService) {}
 
   ngOnInit(): void {
     if (!this.formGroup.get('hora')) {
@@ -69,32 +72,37 @@ export class AgendaFechaComponent implements OnInit {
     if (!this.medico?.id) return;
 
     this.cargando = true;
+    const fechaStr = fecha.toISOString().split('T')[0];
 
-    // Simulación de API
-    setTimeout(() => {
-      const diaSemana = fecha.getDay(); // 0 domingo - 6 sábado
+    this.service.getHorariosDisponibles(this.medico.id, fechaStr).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.horarios = response.data.horariosDisponibles || [];
+          this.horariosOcupados = response.data.horariosOcupados || [];
 
-      if (diaSemana === 0) {
-        this.horarios = []; // No atiende domingos
-      } else {
-        this.horarios = [
-          '08:00', '09:00', '10:00', '11:00',
-          '14:00', '15:00', '16:00', '17:00', '18:00'
-        ];
+          // Emitir si ya hay hora seleccionada válida
+          const hora = this.formGroup.get('hora')?.value;
+          if (hora) {
+            this.horarioSeleccionado.emit({ fecha: fechaStr, hora });
+          }
+        } else {
+          this.horarios = [];
+          this.horariosOcupados = [];
+          Swal.fire('Error', response.errorMsg || 'No se pudieron obtener horarios', 'error');
+        }
+        this.cargando = false;
+      },
+      error: (err) => {
+        this.horarios = [];
+        this.horariosOcupados = [];
+        this.cargando = false;
+        Swal.fire('Error', 'Error al obtener horarios desde el servidor', 'error');
+        console.error(err);
       }
-
-      this.cargando = false;
-
-      // Emitir si ya hay fecha y hora válidas
-      const fechaStr = fecha.toISOString().split('T')[0];
-      const hora = this.formGroup.get('hora')?.value;
-      if (hora) {
-        this.horarioSeleccionado.emit({ fecha: fechaStr, hora });
-      }
-    }, 1000);
+    });
   }
 
-  horariosOcupados: string[] = ['10:00', '15:00'];
+  
   isHoraOcupada(hora: string): boolean {
     return this.horariosOcupados.includes(hora); // ejemplo
   }

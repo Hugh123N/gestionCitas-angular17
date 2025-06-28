@@ -19,7 +19,7 @@ interface UserData {
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080'; 
+  private apiUrl = 'http://localhost:8081'; 
   private http = inject(HttpClient);
   private router = inject(Router);
 

@@ -6,7 +6,7 @@
 
     <mat-card-content>
       <div fxLayout="column" fxLayoutGap="10px">
-        <div><strong>Especialidad:</strong> {{ resumenCita?.especialidad?.nombre }}</div>
+        <div><strong>Especialidad:</strong> {{ resumenCita?.medico?.especialidad }}</div>
         <div><strong>Médico:</strong> {{ resumenCita?.medico?.nombre }}</div>
         <div><strong>Fecha:</strong> {{ resumenCita?.fecha | date:'fullDate' }}</div>
         <div><strong>Hora:</strong> {{ resumenCita?.hora }}</div>
