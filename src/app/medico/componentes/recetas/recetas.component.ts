@@ -97,7 +97,10 @@ export class RecetasComponent implements OnInit {
     };
 
     this.http.post('http://localhost:8080/api/cita/registrarReceta', body).subscribe(() => {
-      window.location.reload();
+      // Vuelve a cargar la receta automáticamente
+      this.verReceta(this.citaSeleccionada!);
+      this.mostrarFormulario = false;
+      this.mostrarConfirmacion = false;
     });
   }
 
@@ -141,14 +144,21 @@ export class RecetasComponent implements OnInit {
     };
 
     this.http.post('http://localhost:8080/api/medicamentos/registrar', body).subscribe(() => {
-      this.verReceta(this.citaSeleccionada!);
+      // Espera un momento y vuelve a cargar los medicamentos actualizados
+      setTimeout(() => {
+        this.http.get<any>(`http://localhost:8080/api/medicamentos/listar-por-receta/${this.recetaSeleccionada!.idReceta}`)
+          .subscribe(res => this.medicamentosDeReceta = res.medicamentos);
+      }, 300); // 300ms para asegurarse que el backend guardó
+
       this.cancelarFormularioMedicamento();
     });
   }
 
   eliminarMedicamento(id: number) {
     this.http.delete(`http://localhost:8080/api/medicamentos/eliminar/${id}`).subscribe(() => {
-      this.recetaSeleccionada && this.verReceta(this.citaSeleccionada!);
+      // Vuelve a cargar SOLO los medicamentos
+      this.http.get<any>(`http://localhost:8080/api/medicamentos/listar-por-receta/${this.recetaSeleccionada!.idReceta}`)
+        .subscribe(res => this.medicamentosDeReceta = res.medicamentos);
     });
   }
 
