@@ -29,7 +29,7 @@ export class ServiceService {
     return this.http.get(`${this.apiUrl}/api/medicos`);
   }
 
-  disponibilidad(id: number, ): Observable<any> {
+  disponibilidad(id: number,): Observable<any> {
     return this.http.put(`${this.apiUrl}/citas/cancelar/${id}`, {});
   }
 
@@ -37,10 +37,13 @@ export class ServiceService {
     return this.http.get(`${this.apiUrl}/api/cita/id/${id}`);
   }
 
+  getHorariosDisponibles(idMedico: number, fecha: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/disponibilidad/${idMedico}?fecha=${fecha}`);
+  }
 
-   // ======================== MÉDICOS ========================
+  // ======================== MÉDICOS ========================
 
-  
+
 
 
 }
