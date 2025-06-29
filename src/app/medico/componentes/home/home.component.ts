@@ -27,6 +27,9 @@ export class HomeComponent implements OnInit {
   medicoEditado = '';
   pacienteEditado = '';
   estadoEditado = '';
+  diagnosticoEditado = '';
+  //aqi diagnosticoEditado = '';
+
   citaEnConfirmacion: CitaDTO | null = null;
   idMedico: number = 0;
 
@@ -73,6 +76,7 @@ export class HomeComponent implements OnInit {
     this.notasEditadas = cita.notasMedicas;
     this.fechaEditada = cita.fecha;
     this.horaEditada = cita.hora;
+    this.diagnosticoEditado = cita.diagnostico;
     this.medicoEditado = cita.medico.nombre;
     this.pacienteEditado = cita.paciente.nombre;
     this.estadoEditado = cita.estado;
@@ -100,23 +104,32 @@ export class HomeComponent implements OnInit {
   ejecutarEdicion(): void {
     if (!this.citaEnConfirmacion) return;
 
-    const cuerpo = {
-      ...this.citaEnConfirmacion,
-      tratamiento: this.tratamientoEditado,
-      fecha: this.fechaEditada,
-      horario: this.horaEditada,
-      duracion: this.duracionEditada,
-      medico: this.medicoEditado,
-      nombre: this.pacienteEditado,
-      estado: this.estadoEditado,
-      notas: this.notasEditadas
+    const body = {
+      id: this.citaEnConfirmacion.idCitas,
+      actionCitaMedicoDTO: {
+        notasMedicas: this.notasEditadas,
+        diagnostico: this.diagnosticoEditado,
+        hora: this.horaEditada,
+        fecha: this.fechaEditada,
+        tratamiento: this.tratamientoEditado
+
+      }
     };
 
-    this.http.put<any>(`http://localhost:8080/api/citas/${cuerpo.idCitas}`, cuerpo)
+    this.http.put<any>('http://localhost:8080/api/cita/actualizar/info-cita', body)
       .subscribe({
         next: (res) => {
-          this.obtenerCitas();
-          // this.verDetalle(cuerpo);
+          console.log(res.message);
+          // Actualiza solo los campos modificados
+          if (this.citaSeleccionada) {
+            this.citaSeleccionada.notasMedicas = this.notasEditadas;
+            this.citaSeleccionada.diagnostico = this.diagnosticoEditado;
+            this.citaSeleccionada.fecha = this.fechaEditada;
+            this.citaSeleccionada.hora = this.horaEditada;
+            this.citaSeleccionada.tratamiento = this.tratamientoEditado;
+
+          }
+          this.obtenerCitas(); // para actualizar la lista general
           this.resetearEstados();
         },
         error: (err) => {
@@ -124,7 +137,7 @@ export class HomeComponent implements OnInit {
         }
       });
   }
-
+  //*********************************************** */
 
   cancelarEdicion(): void {
     this.resetearEstados();
@@ -138,9 +151,14 @@ export class HomeComponent implements OnInit {
   ejecutarCancelacion(): void {
     if (!this.citaEnConfirmacion) return;
 
+
+
     this.http.put<any>(`http://localhost:8080/api/cita/actualizarEstado/${this.citaEnConfirmacion.idCitas}`, {})
       .subscribe({
         next: () => {
+          if (this.citaSeleccionada) {
+            this.citaSeleccionada.estado = 'Cancelada'; // o el estado real devuelto si tu backend lo manda
+          }
           this.obtenerCitas();
           this.resetearEstados();
         },
@@ -149,6 +167,7 @@ export class HomeComponent implements OnInit {
         }
       });
   }
+
 
   cancelarCancelacion(): void {
     this.resetearEstados();

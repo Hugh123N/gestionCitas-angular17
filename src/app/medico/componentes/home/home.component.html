@@ -102,6 +102,16 @@
                     <textarea [(ngModel)]="notasEditadas" rows="3"></textarea>
                 </ng-container>
             </div>
+
+            <!-- Diagnóstico -->
+            <div class="nota">
+                <strong>Diagnóstico:</strong><br>
+                <ng-container *ngIf="!modoEdicion">{{ citaSeleccionada.diagnostico }}</ng-container>
+                <ng-container *ngIf="modoEdicion">
+                    <textarea [(ngModel)]="diagnosticoEditado" rows="3"></textarea>
+                </ng-container>
+            </div>
+
         </div>
 
         <div class="botones">
