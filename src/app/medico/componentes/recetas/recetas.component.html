@@ -58,8 +58,10 @@
     <p><strong>Firma del Médico:</strong> {{ recetaSeleccionada?.firmaMedico }}</p>
     <p><strong>Instrucciones:</strong> {{ recetaSeleccionada?.instrucciones }}</p>
 
+
+
     <!-- Lista Medicamentos -->
-    <div *ngIf="medicamentosDeReceta.length > 0" class="medicamentos-lista">
+    <div *ngIf="medicamentosDeReceta && medicamentosDeReceta.length > 0" class="medicamentos-lista">
         <h4>Medicamentos:</h4>
         <ul>
             <li *ngFor="let med of medicamentosDeReceta">

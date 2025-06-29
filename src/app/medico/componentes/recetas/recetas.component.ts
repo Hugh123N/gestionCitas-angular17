@@ -25,6 +25,7 @@ export class RecetasComponent implements OnInit {
   firmaMedico: string = '';
   instruccionesAdicionales: string = '';
 
+
   mostrarFormulario = false;
   mostrarConfirmacion = false;
   mostrarVistaReceta = false;
@@ -43,19 +44,14 @@ export class RecetasComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit(): void {
-    // SOLO para pruebas: simula un médico si no está en localStorage
-    const userEnStorage = localStorage.getItem('user');
-    if (!userEnStorage) {
-      const medicoDummy = {
-        idUsuario: 6,
-        nombre: 'fernando',
-        apellido: 'colunga',
-        rol: 'Medico'
-      };
-      localStorage.setItem('user', JSON.stringify(medicoDummy));
-    }
 
+  //--------------------------------------------------------------
+  ngOnInit(): void {
+    this.cargarCitas();
+  }
+
+
+  cargarCitas(): void {
     const user = JSON.parse(localStorage.getItem('user')!);
     const medicoId = user?.idUsuario;
 
@@ -73,6 +69,7 @@ export class RecetasComponent implements OnInit {
       }
     });
   }
+  //--------------------------------------------------------------
 
   abrirFormulario(cita: CitaDTO) {
     this.citaSeleccionada = cita;
@@ -97,36 +94,75 @@ export class RecetasComponent implements OnInit {
     };
 
     this.http.post('http://localhost:8080/api/cita/registrarReceta', body).subscribe(() => {
-      // Vuelve a cargar la receta automáticamente
-      this.verReceta(this.citaSeleccionada!);
       this.mostrarFormulario = false;
       this.mostrarConfirmacion = false;
+      this.citaSeleccionada = null;
+
+      // Esperar un poco a que el backend actualice la cita con la receta
+      setTimeout(() => {
+        this.cargarCitas(); // 🔁 Vuelve a cargar la lista de citas
+      }, 300);
     });
   }
 
   verReceta(cita: CitaDTO) {
-    const pacienteId = cita.paciente.idUsuario;
-    this.http.get<RecetaDTO[]>(`http://localhost:8080/api/recetas/paciente/${pacienteId}`).subscribe(data => {
-      const receta = data.find(r => r.tratamiento === cita.tratamiento);
-      if (receta) {
-        this.recetaSeleccionada = receta;
-        this.mostrarVistaReceta = true;
+    if (!cita.recetaDTO) {
+      console.warn('Esta cita no tiene receta registrada');
+      return;
+    }
 
-        this.http.get<any>(`http://localhost:8080/api/medicamentos/listar-por-receta/${receta.idReceta}`)
-          .subscribe(res => this.medicamentosDeReceta = res.medicamentos);
-      }
-    });
+    this.recetaSeleccionada = {
+      ...cita.recetaDTO,
+      nombrePaciente: `${cita.paciente.nombre} ${cita.paciente.apellido}`,
+      grupoSanguineoPaciente: cita.paciente.grupoSanguineo,
+      nombreMedico: `${cita.medico.nombre} ${cita.medico.apellido}`,
+      especialidadMedico: cita.medico.especialidad,
+      diagnostico: cita.diagnostico,
+      tratamiento: cita.tratamiento,
+      instrucciones: (cita.recetaDTO as any).instruccionesAdicionales,
+      medicamentos: [] // lo cargaremos luego
+    };
+
+    this.mostrarVistaReceta = true;
+    this.mostrarFormularioMedicamento = false;
+    this.mostrarConfirmacionMedicamento = false;
+
+    this.http.get<any>(`http://localhost:8080/api/medicamentos/listar-por-receta/${this.recetaSeleccionada.idReceta}`)
+      .subscribe({
+        next: res => this.medicamentosDeReceta = res.medicamentos || [],
+        error: err => {
+          console.error('Error al obtener medicamentos:', err);
+          this.medicamentosDeReceta = [];
+        }
+      });
   }
+
+
+
+
+
 
   cerrarVistaReceta() {
     this.mostrarVistaReceta = false;
     this.recetaSeleccionada = null;
     this.medicamentosDeReceta = [];
+    this.mostrarConfirmacionEliminar = false; // <- por si quedó abierta
   }
 
   abrirFormularioMedicamento() {
+    // 🔁 Reset del medicamento nuevo
+    this.nuevoMedicamento = {
+      medicamento: '',
+      dosis: '',
+      frecuencia: '',
+      duracion: '',
+      observaciones: ''
+    };
+
     this.mostrarFormularioMedicamento = true;
+    this.mostrarConfirmacionMedicamento = false;
   }
+
 
   cancelarFormularioMedicamento() {
     this.mostrarFormularioMedicamento = false;
@@ -172,7 +208,11 @@ export class RecetasComponent implements OnInit {
 
   confirmarEliminar() {
     this.http.delete(`http://localhost:8080/api/recetas/${this.recetaSeleccionada!.idReceta}`).subscribe(() => {
-      this.cerrarVistaReceta();
+      this.cerrarVistaReceta();           // Cierra panel de receta
+      this.mostrarConfirmacionEliminar = false; // 🔁 Cierra el panel de confirmación
+      this.cargarCitas();                 // Recarga citas para reflejar cambios
     });
   }
+
+
 }
