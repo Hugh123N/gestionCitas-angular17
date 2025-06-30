@@ -41,6 +41,12 @@ export class ServiceService {
     return this.http.get(`${this.apiUrl}/api/medicos/${idMedico}?fecha=${fecha}`);
   }
 
+  getDownloadPdfReceta(idMedico: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/api/recetas/pdf/${idMedico}`,{
+      responseType: 'blob'
+    });
+  }
+  
   // ======================== MÉDICOS ========================
 
 

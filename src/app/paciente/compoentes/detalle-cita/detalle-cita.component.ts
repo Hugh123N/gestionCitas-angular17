@@ -13,12 +13,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   selector: 'app-detalle-cita',
   standalone: true,
   imports: [CommonModule,
-  MatCardModule,
-  MatIconModule,
-  MatChipsModule,
-  FlexLayoutModule,
-  MatButtonModule,
-  MatProgressSpinnerModule
+    MatCardModule,
+    MatIconModule,
+    MatChipsModule,
+    FlexLayoutModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './detalle-cita.component.html',
   styleUrl: './detalle-cita.component.css'
@@ -29,14 +29,14 @@ export class DetalleCitaComponent implements OnInit {
   loading: boolean = true;
   error: boolean = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private service: ServiceService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private service: ServiceService) { }
 
   ngOnInit() {
     this.idCita = Number(this.route.snapshot.paramMap.get('id'));
     this.obtenerCita(this.idCita);
   }
 
-  obtenerCita(id:number) {
+  obtenerCita(id: number) {
     this.service.getCitaById(id).subscribe({
       next: (data) => {
         this.cita = data;
@@ -51,13 +51,32 @@ export class DetalleCitaComponent implements OnInit {
   }
 
   getEstadoColor(estado: string): 'primary' | 'accent' | 'warn' {
-  switch (estado.toLowerCase()) {
-    case 'pendiente': return 'accent';
-    case 'confirmada': return 'primary';
-    case 'cancelada': return 'warn';
-    default: return 'primary';
+    switch (estado.toLowerCase()) {
+      case 'pendiente': return 'accent';
+      case 'confirmada': return 'primary';
+      case 'cancelada': return 'warn';
+      default: return 'primary';
+    }
   }
-}
+
+  descargarReceta() {
+    const recetaId = this.cita.recetaDTO.idReceta;
+
+    this.service.getDownloadPdfReceta(recetaId).subscribe({
+      next: (pdfBlob) => {
+        const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `receta-${recetaId}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error al descargar la receta:', err);
+      }
+    });
+  }
 
   volverInicio() {
     this.router.navigate(['/paciente']);

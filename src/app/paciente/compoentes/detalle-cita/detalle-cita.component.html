@@ -69,7 +69,13 @@
 
     <!-- Receta médica -->
     <mat-card class="info-card receta-card" *ngIf="cita.recetaDTO">
-      <mat-card-title class="titulo-seccion">Receta Médica</mat-card-title>
+      <mat-card-title fxLayout="row" fxLayoutAlign="space-between center" class="titulo-seccion">
+        <span>Receta Médica</span>
+        <button mat-raised-button color="accent" (click)="descargarReceta()" matTooltip="Descargar receta en PDF">
+          <mat-icon>picture_as_pdf</mat-icon>
+          Descargar
+        </button>
+      </mat-card-title>
       <mat-card-content fxLayout="column" fxLayoutGap="10px">
         <p><mat-icon>calendar_month</mat-icon> <strong>Fecha:</strong> {{ cita.recetaDTO.fecha | date }}</p>
         <p><mat-icon>note</mat-icon> <strong>Instrucciones:</strong> {{ cita.recetaDTO.instruccionesAdicionales }}</p>
